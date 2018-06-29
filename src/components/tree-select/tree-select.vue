@@ -50,7 +50,7 @@
       }
     },
     mounted () {
-      this.$nextTick(function () {
+      this.$nextTick(() => {
         // 保证完全挂载
         this.$refs.tree.setCurrentKey(this.select)
       })

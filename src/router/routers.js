@@ -83,7 +83,7 @@ export default [
           title: '资源管理',
           requireAuth: true
         },
-        component: () => import('@/view/multilevel/level-1.vue')
+        component: () => import('@/view/system/resource')
       },
       {
         path: 'log',
