@@ -69,15 +69,15 @@ class httpRequest {
         Notice.destroy('authc_error')
         if (code === 1130 || code === 1132) {
           Cookies.remove(TOKEN_KEY)
-          window.location.href = '/#/login'
+          Notice.info({
+            title: '温馨提示',
+            desc: data.msg,
+            duration: 0,
+            name: 'authc_error'
+          })
           setTimeout(() => {
-            Notice.info({
-              title: '温馨提示',
-              desc: data.msg,
-              duration: 0,
-              name: 'authc_error'
-            })
-          }, 500)
+            window.location.href = '/#/login'
+          }, 1000)
           // 返回reject阻拦本次请求，会报错，但是没办法userName.trim()
           return Promise.reject(data.msg)
         } else {

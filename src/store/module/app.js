@@ -1,7 +1,9 @@
 import { getBreadCrumbList, setTagNavListInLocalstorage, getMenuByRouter, getTagNavListFromLocalstorage, getHomeRoute } from '@/libs/util'
 import routers from '@/router/routers'
+
 export default {
   state: {
+    clientHeight: document.documentElement.clientHeight,
     breadCrumbList: [],
     tagNavList: [],
     homeRoute: getHomeRoute(routers),
@@ -15,9 +17,15 @@ export default {
     },
     messageCount (state) {
       return state.messageCount
+    },
+    clientHeight (state) {
+      return state.clientHeight
     }
   },
   mutations: {
+    setClientHeight (state, height) {
+      state.clientHeight = height
+    },
     setBreadCrumb (state, routeMetched) {
       state.breadCrumbList = getBreadCrumbList(routeMetched)
     },

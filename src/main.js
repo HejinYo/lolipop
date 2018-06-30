@@ -10,7 +10,7 @@ import importDirective from '@/directive'
 import 'iview/dist/styles/iview.css'
 import '@/assets/icons/iconfont.css'
 import { Tree, Checkbox, Table, TableColumn, Loading } from 'element-ui'
-//require('@/mock')
+// require('@/mock')
 
 Vue.use(iView)
 Vue.config.productionTip = false
@@ -33,5 +33,24 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  data: {
+    onresizeFlag: true
+  },
+  mounted () {
+    this.$nextTick(function () {
+      let _this = this
+      // 保证完全挂载
+      window.onresize = function temp () {
+        if (_this.onresizeFlag) {
+          _this.onresizeFlag = false
+          let height = document.documentElement.clientHeight
+          store.commit('setClientHeight', height)
+          setTimeout(function () {
+            _this.onresizeFlag = true
+          }, 30)
+        }
+      }
+    })
+  }
 })
