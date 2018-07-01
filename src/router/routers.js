@@ -81,7 +81,8 @@ export default [
         meta: {
           icon: 'briefcase',
           title: '资源管理',
-          requireAuth: true
+          requireAuth: true,
+          notCache: false
         },
         component: () => import('@/view/system/resource')
       },

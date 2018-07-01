@@ -21,120 +21,182 @@
       </i-Col>
 
       <i-Col :xs="24" :sm="14" :md="14" :lg="18">
-        <div>
-          <Card>
-            <Row v-if="advancedSearch">
-              <!-- 高级查询 -->
-              <Card :dis-hover="true">
-                <Form ref="queryParam" :model="queryParam" :label-width="80" class="search">
-                  <Row>
-                    <FormItem label="资源名称:" prop="resName">
-                      <Input v-model="queryParam.resName"></Input>
-                    </FormItem>
-                    <FormItem label="状态:" prop="state">
-                      <Select v-model="queryParam.state">
-                        <Option value="0">启用</Option>
-                        <Option value="1">禁用</Option>
-                      </Select>
-                    </FormItem>
-                    <FormItem label="创建时间:" prop="createTime">
-                      <DatePicker v-model="queryParam.createTime" type="date" @on-change="dateHandleChange"></DatePicker>
-                    </FormItem>
-                  </Row>
-                </Form>
-              </Card>
+        <Card :padding="0">
+          <p slot="title">
+            {{tableShow}}
+          </p>
+          <a href="#" slot="extra" @click.prevent="chageTable">
+            <Icon type="ios-loop-strong"></Icon>
+            切换
+          </a>
+          <div>
+            <Card :bordered="false">
+              <!--操作工具条-->
+              <Row>
+                <i-Col :xs="24" :sm="12" :md="14" :lg="16">
+                  <Button type="primary" icon="android-add" @click="add">添加</Button>
+                  <Button type="primary" icon="edit">修改</Button>
+                  <Button type="error" icon="android-delete">删除</Button>
+                </i-Col>
+
+                <i-Col :xs="24" :sm="12" :md="10" :lg="8">
+                  <i-Input v-model="pageQuery.queryValue" on-enter="search" placeholder="查询..." :maxlength="32">
+                    <Select v-model="pageQuery.queryKey" @on-change="search" slot="prepend" style="width: 80px">
+                      <template v-if="tableType === 0">
+                        <Option value="resName">资源名称</Option>
+                        <Option value="resCode">资源编码</Option>
+                      </template>
+                      <template v-if="tableType === 1">
+                        <Option value="permName">权限名称</Option>
+                        <Option value="permCode">权限编码</Option>
+                      </template>
+                    </Select>
+                    <Button slot="append" @click="search">
+                      <Icon type="ios-search-strong"></Icon>
+                    </Button>
+                    <Button slot="append" @click="searchRset">
+                      <Icon type="ios-loop-strong"></Icon>
+                    </Button>
+                  </i-Input>
+                </i-Col>
+              </Row>
               <br/>
-            </Row>
-            <!--操作工具条-->
-            <Row>
-              <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                <Button type="primary" icon="android-add">添加</Button>
-                <Button type="primary" icon="edit">修改</Button>
-                <Button type="error" icon="android-delete">删除</Button>
-              </i-Col>
+              <div>
+                <div>
+                  <!-- 资源表格 -->
+                  <el-table v-if="tableType === 0" stripe border highlight-current-row size="mini" element-loading-text="拼命加载中"
+                            :data="listData" v-loading="listLoading" :height="clientHeight-303"
+                            @row-click="rowClick" @row-dblclick="rowDbClick" @sort-change="sortChange">
+                    <el-table-column prop="resId" label="编号" sortable="custom" align="center" width="70"></el-table-column>
+                    <el-table-column prop="resName" label="资源名称" sortable="custom" align="center" min-width="150"></el-table-column>
+                    <el-table-column prop="resCode" label="资源编码" sortable="custom" align="center" min-width="150"></el-table-column>
+                    <!--<el-table-column prop="resPname" label="上级资源" sortable="custom" align="center" min-width="150"></el-table-column>-->
+                    <el-table-column prop="icon" label="图标" show-overflow-tooltip align="center" width="70">
+                      <template slot-scope="scope">
+                        <Icon :type="scope.row.icon" :size="16"></Icon>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="seq" sortable="custom" label="序号" align="center" width="70"></el-table-column>
+                    <el-table-column prop="type" label="类型" sortable="custom" align="center" width="90">
+                      <template slot-scope="scope">
+                        <Tag :color="scope.row.type === 0 ? 'green': 'blue' ">
+                          {{scope.row.type === 0 ? '文件夹' : '菜单'}}
+                        </Tag>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
+                      <template slot-scope="scope">
+                        <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
+                          {{scope.row.state === 0 ? '正常' : '禁用'}}
+                        </Tag>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" sortable="custom" label="创建日期" align="center" width="160"></el-table-column>
+                  </el-table>
+                </div>
+                <div>
+                  <!-- 权限表格 -->
+                  <el-table v-if="tableType === 1" stripe border highlight-current-row size="mini" element-loading-text="拼命加载中"
+                            :data="listData" v-loading="listLoading" :height="clientHeight-303"
+                            @row-click="rowClick" @row-dblclick="rowDbClick" @sort-change="sortChange">
+                    <el-table-column prop="permId" label="编号" sortable="custom" align="center" width="70"></el-table-column>
+                    <el-table-column prop="resName" label="资源名称" sortable="custom" align="center" min-width="150"></el-table-column>
+                    <el-table-column prop="permName" label="权限名称" sortable="custom" align="center" min-width="150"></el-table-column>
+                    <el-table-column prop="permCode" label="权限编码" sortable="custom" align="center" min-width="150"></el-table-column>
+                    <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
+                      <template slot-scope="scope">
+                        <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
+                          {{scope.row.state === 0 ? '正常' : '禁用'}}
+                        </Tag>
+                      </template>
+                    </el-table-column>
+                    <el-table-column prop="createTime" sortable="custom" label="创建日期" align="center" width="160"></el-table-column>
+                  </el-table>
+                </div>
 
-              <i-Col :xs="24" :sm="12" :md="10" :lg="8">
-                <i-Input v-model="pageQuery.queryValue" :disabled="advancedSearch" @on-enter="search" placeholder="查询..." :maxlength="32" clearable>
-                  <Select v-model="pageQuery.queryKey" :disabled="advancedSearch" @on-change="search" slot="prepend" style="width: 80px">
-                    <Option value="resName">资源名称</Option>
-                    <Option value="resCode">资源编号</Option>
-                  </Select>
-                  <Button slot="append" @click="search">
-                    <Icon type="ios-search-strong"></Icon>
-                  </Button>
-                  <Button slot="append" @click="searchRset">重置</Button>
-                  <Button slot="append" @click="advancedSearch = !advancedSearch">
-                    <Icon :type=" advancedSearch ? 'chevron-up' : 'chevron-down' "></Icon>
-                  </Button>
-                </i-Input>
-              </i-Col>
-            </Row>
-            <br/>
-
-            <el-table stripe border highlight-current-row size="mini" element-loading-text="拼命加载中"
-                      :data="listData" v-loading="listLoading" :height="clientHeight-250"
-                      @row-click="rowClick" @row-dblclick="rowDbClick" @sort-change="sortChange">
-              <el-table-column prop="resId" label="编号" sortable="custom" align="center" width="70"></el-table-column>
-              <el-table-column prop="resType" label="类型" sortable="custom" align="center" width="90">
-                <template slot-scope="scope">
-                  <Tag :color="scope.row.resType === 0 ? 'green': 'blue' ">
-                    {{scope.row.resType === 0 ? '文件夹' : '菜单'}}
-                  </Tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="resName" label="资源名称" sortable="custom" align="center" min-width="150"></el-table-column>
-              <el-table-column prop="resCode" label="资源编码" sortable="custom" align="center" min-width="150"></el-table-column>
-              <!--<el-table-column prop="resPname" label="上级资源" sortable="custom" align="center" min-width="150"></el-table-column>-->
-              <el-table-column prop="resIcon" label="图标" show-overflow-tooltip align="center" width="70">
-                <template slot-scope="scope">
-                  <Icon :type="scope.row.icon" :size="16"></Icon>
-                </template>
-              </el-table-column>
-              <el-table-column prop="seq" sortable="custom" label="序号" align="center" width="70"></el-table-column>
-              <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
-                <template slot-scope="scope">
-                  <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
-                    {{scope.row.state === 0 ? '正常' : '禁用'}}
-                  </Tag>
-                </template>
-              </el-table-column>
-              <el-table-column prop="createTime" sortable="custom" label="创建日期" align="center" width="160"></el-table-column>
-            </el-table>
-            <br/>
-            <!--翻页工具条-->
-            <Page show-elevator show-total show-sizer size="small" placement="top"
-                  :total="pageParam.total"
-                  :current="pageParam.pageNum===0?1:pageParam.pageNum"
-                  :page-size="pageParam.pageSize"
-                  :page-size-opts="[10,20,50,100]"
-                  @on-change="pageChange"
-                  @on-page-size-change="sizeChange">
-            </Page>
-          </Card>
-        </div>
+              </div>
+              <br/>
+              <!--翻页工具条-->
+              <Page show-elevator show-total show-sizer size="small" placement="top"
+                    :total="pageParam.total"
+                    :current="pageParam.pageNum===0?1:pageParam.pageNum"
+                    :page-size="pageParam.pageSize"
+                    :page-size-opts="[10,20,50,100]"
+                    @on-change="pageChange"
+                    @on-page-size-change="sizeChange">
+              </Page>
+            </Card>
+          </div>
+        </Card>
       </i-Col>
     </Row>
+    <Modal :mask-closable="false" v-model="formVisible" :title="tableShow">
+      <Form ref="formData" :model="formData" :rules="formValidate" :label-width="80">
+        <FormItem label="上级资源" prop="resPid">
+          <i-Input v-model="formData.resPid" placeholder="请输入"></i-Input>
+        </FormItem>
+        <FormItem label="资源类型" prop="type">
+          <RadioGroup v-model="formData.type">
+            <Radio label="menu">菜单</Radio>
+            <Radio label="file">文件</Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="资源名称" prop="resName">
+          <Input v-model="formData.resName" placeholder="请输入"></Input>
+        </FormItem>
+        <FormItem label="资源编码" prop="resCode">
+          <Input v-model="formData.resCode" placeholder="请输入"/>
+        </FormItem>
+        <FormItem label="资源图标：" prop="icon">
+          <icon-pane v-bind:icon.sync="formData.icon"></icon-pane>
+        </FormItem>
+        <FormItem label="排序号" prop="seq">
+          <InputNumber :max="100" :min="1" v-model="formData.seq"></InputNumber>
+        </FormItem>
+        <FormItem label="状态" prop="state">
+          <i-switch v-model="formData.state" size="large" :true-value="0" :false-value="1">
+            <span slot="open">启用</span>
+            <span slot="close">禁用</span>
+          </i-switch>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button @click="formVisible = false">取 消</Button>
+        <Button type="primary">确 定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   import OperateTree from '@/components/operate-tree'
-  import { reqResourceOperateTree, reqResourceListPage } from '@/api/resource.js'
+  import IconPane from '@/components/icon-pane'
+  import { reqResourceOperateTree, reqResourceListPage, reqRermissionListPage } from '@/api/resource.js'
 
   export default {
     name: 'sys-resource',
     components: {
-      OperateTree
+      OperateTree,
+      IconPane
     },
     computed: {
       ...mapGetters([
         'clientHeight'
-      ])
+      ]),
+      tableShow () {
+        switch (this.tableType) {
+          case 0:
+            return '资源管理'
+          case 1:
+            return '权限管理'
+        }
+      }
     },
     data () {
       return {
-        triggerOffset: '300px',
+        // 切换操作不同表格 0：资源管理 1：权限管理
+        tableType: 0,
         // 操作树数据
         operateTreeData: [],
         // 表格加载
@@ -143,14 +205,6 @@
         listData: [],
         // 当前选择行
         currCol: null,
-        // 高级查询
-        advancedSearch: false,
-        // 高级查询参数
-        queryParam: {
-          resName: null,
-          state: null,
-          createTime: null
-        },
         // 查询参数
         pageQuery: {
           queryTree: null,
@@ -161,10 +215,18 @@
         pageParam: {
           total: 0,
           pageNum: 1,
-          pageSize: 50,
+          pageSize: 20,
           sidx: null,
           sort: null
-        }
+        },
+        // 显示表单标识
+        formVisible: false,
+        // 表单模型
+        formData: {
+          icon: 'filing'
+        },
+        // 表单验证
+        formValidate: {}
       }
     },
     mounted () {
@@ -175,8 +237,24 @@
       })
     },
     methods: {
-      test (val) {
-        alert(val)
+      // 切换操作表格
+      chageTable () {
+        switch (this.tableType) {
+          case 0:
+            this.tableType = 1
+            this.pageQuery.queryKey = 'permCode'
+            break
+          case 1:
+            this.tableType = 0
+            this.pageQuery.queryKey = 'resName'
+        }
+        this.currCol = null
+        this.listData = []
+        this.pageParam.total = 0
+        this.pageParam.pageNum = 1
+        this.pageParam.sidx = null
+        this.pageParam.sort = null
+        this.loadListPage()
       },
       loadTreeData () {
         reqResourceOperateTree().then((data) => {
@@ -187,22 +265,35 @@
         })
       },
       loadListPage () {
-        let method = this.advancedSearch ? 'post' : 'get'
-        let params = this.advancedSearch ? this.pageParam : {...this.pageParam, ...this.pageQuery}
-        reqResourceListPage(method, this.queryParam, params).then(data => {
-          let {code, msg, result} = data
-          if (code === 0) {
-            this.currCol = null
-            this.listData = result.list
-            this.pageParam.total = result.total
-            this.pageParam.pageNum = result.pageNum
-          } else {
-            this.$Message.warning(msg)
-          }
-          setTimeout(() => {
-            this.listLoading = false
-          }, 100)
-        })
+        this.listLoading = true
+        let method = 'get'
+        let params = {...this.pageParam, ...this.pageQuery}
+        if (this.tableType === 0) {
+          // 加载资源表格
+          reqResourceListPage(method, params).then(data => {
+            this.processListData(data)
+          })
+        } else {
+          // 加载权限表格
+          reqRermissionListPage(method, params).then(data => {
+            this.processListData(data)
+          })
+        }
+      },
+      // 处理表格数据
+      processListData (data) {
+        let {code, msg, result} = data
+        if (code === 0) {
+          this.currCol = null
+          this.listData = result.list
+          this.pageParam.total = result.total
+          this.pageParam.pageNum = result.pageNum
+        } else {
+          this.$Message.warning(msg)
+        }
+        setTimeout(() => {
+          this.listLoading = false
+        }, 100)
       },
       // 表格行点击
       rowClick (data) {
@@ -228,27 +319,19 @@
         this.pageParam.pageSize = val
         this.loadListPage()
       },
-      // iview大坑，时间选择器默认使用utc，不能使用v-model绑定
-      dateHandleChange (value) {
-        this.queryParam.createTime = value
-      },
       // 重置表格
       resetForm (formName) {
         this.$refs[formName].resetFields()
       },
       // 查询
       search () {
-        if (this.advancedSearch || this.pageQuery.queryValue) {
+        if (this.pageQuery.queryValue) {
           this.loadListPage()
         }
       },
       // 查询重置
       searchRset () {
-        if (this.advancedSearch) {
-          this.resetForm('queryParam')
-        } else {
-          this.pageQuery.queryValue = null
-        }
+        this.pageQuery.queryValue = null
         this.loadListPage()
       },
       // 被拖拽节点对应的 Node、结束拖拽时最后进入的节点、被拖拽节点的放置位置（before、after、inner）、event
@@ -271,6 +354,10 @@
       nodeClick (data, node, ref) {
         this.pageQuery.queryTree = data.resId === 1 ? null : data.resId
         this.loadListPage()
+      },
+      // 添加
+      add () {
+        this.formVisible = true
       }
     }
   }
