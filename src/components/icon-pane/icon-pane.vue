@@ -5,16 +5,17 @@
       <Button type="ghost" style="width: 50px">
         <Icon :type="currIcon" :size="15" @click="visible = true"></Icon>
       </Button>
-      <div slot="content" style="height:200px">
-        <div class="icons">
-          <div class="icons-item" v-for="icon in icons">
-            <div @click="selectIcon(icon)">
-              <Icon :type="icon" style="font-size: 20px;"></Icon>
-              <p> {{icon}}
-              </p>
+      <div slot="content">
+        <Card :padding="0" :bordered="false">
+          <div class="icons">
+            <div class="icons-item" v-for="icon in icons">
+              <div @click="selectIcon(icon)">
+                <Icon :type="icon" size="30"></Icon>
+                <!--<p> {{icon}} </p>-->
+              </div>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </Poptip>
   </i-Input>
@@ -22,6 +23,12 @@
 <script>
   export default {
     name: 'icon-pane',
+    props: {
+      icon: {
+        type: String,
+        default: ''
+      }
+    },
     data () {
       return {
         visible: false,
@@ -38,7 +45,11 @@
         this.visible = false
         this.currIcon = icon
         this.$emit('update:icon', icon)
-        this.$emit('selectIcon', icon)
+      }
+    },
+    watch: {
+      icon (val) {
+        this.currIcon = val
       }
     }
   }
@@ -46,21 +57,15 @@
 <style lang="less" scoped>
   .icons-item {
     float: left;
-    /* margin: 6px 6px 6px 0;*/
-    width: 110px;
+    width: 50px;
     text-align: center;
-    list-style: none;
     cursor: pointer;
-    height: 80px;
-    color: #5c6b77;
-    transition: all .2s ease;
-    position: relative;
-    padding-top: 10px;
+    height: 50px;
   }
 
   .icons {
-    overflow: hidden;
-    zoom: 1;
+    height: 200px;
+    overflow-y: auto;
   }
 
 </style>
