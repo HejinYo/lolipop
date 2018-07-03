@@ -4,8 +4,8 @@
     <div :style="{ height: `${this.clientHeight - 240}px`,overflowY: 'auto'}">
       <el-tree
         :data="data"
-        :ref="refName"
-        :node-key="nodeKey"
+        ref="operateTree"
+        :node-key="value"
         :default-expanded-keys="expandedKeys"
         :expand-on-click-node="false"
         :default-expand-all="defaultExpandAll"
@@ -24,7 +24,7 @@
           <Poptip v-if="false" transfer trigger="hover" placement="right">
             <div slot="content" style="width: auto">
                 <Button @click="addNode(data,node)" type="primary" size="small">添加</Button>
-                <span v-if="nodeEdit || data[nodeKey]!==1">
+                <span v-if="nodeEdit || data[value]!==1">
                   <Button @click="editNode(data,node)" type="info" size="small">修改</Button>
                   <Button @click="delNode(data,node)" type="error" size="small">删除</Button>
                 </span>
@@ -33,16 +33,15 @@
           </span>
         <span>
           <Dropdown transfer trigger="custom" placement="right-start"
-                    :visible="currData===data[nodeKey]" @on-clickoutside="clickoutside">
+                    :visible="currData===data[value]" @on-clickoutside="clickoutside">
             <DropdownMenu slot="list">
               <ul class="ivu-dropdown-menu">
                 <li class="ivu-dropdown-item" @click="addNode(data,node)">添加</li>
-                <li class="ivu-dropdown-item" v-if="nodeEdit || data[nodeKey]!==1" @click="editNode(data,node)">修改</li>
-                <li class="ivu-dropdown-item" v-if="nodeEdit || data[nodeKey]!==1" @click="delNode(data,node)">删除</li>
+                <li class="ivu-dropdown-item" v-if="nodeEdit || data[value]!==1" @click="editNode(data,node)">修改</li>
+                <li class="ivu-dropdown-item" v-if="nodeEdit || data[value]!==1" @click="delNode(data,node)">删除</li>
                </ul>
             </DropdownMenu>
           </Dropdown>
-
         </span>
         <span>
         </span>
@@ -58,14 +57,6 @@
   export default {
     name: 'operate-tree',
     props: {
-      refName: {
-        type: String,
-        default: 'treeEdit'
-      },
-      nodeKey: {
-        type: String,
-        default: 'value'
-      },
       label: {
         type: String,
         default: 'label'
@@ -111,7 +102,9 @@
     },
     data () {
       return {
+        // 右击控制弹出
         currData: null,
+        // 节点过滤
         filterText: ''
       }
     },
@@ -143,7 +136,7 @@
       },
       // 鼠标右击
       handleContextmenu (event, data, node) {
-        this.currData = data[this.nodeKey]
+        this.currData = data[this.value]
         this.$emit('node-contextmenu', event, data, node)
       },
       // 被拖拽节点对应的 Node、结束拖拽时最后进入的节点、被拖拽节点的放置位置（before、after、inner）、event
@@ -153,17 +146,19 @@
       // 下拉菜单点击外部
       clickoutside () {
         this.currData = null
+      },
+      getNode (param) {
+        return this.$refs.operateTree.getNode(param)
       }
     },
     mounted () {
       // 保证完全挂载
       this.$nextTick(function () {
-
       })
     },
     watch: {
       filterText (val) {
-        this.$refs[this.refName].filter(val)
+        this.$refs['operateTree'].filter(val)
       }
     }
   }

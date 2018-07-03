@@ -6,16 +6,18 @@
           <p slot="title">资源树</p>
           <div>
             <operate-tree
+              ref="operateTree"
               :data="operateTreeData"
-              node-key="resId"
+              value="resId"
               label="resName"
               icon="icon"
+              :expandedKeys="operateExpandedKeys"
               :accordion="false"
-              default-expand-all
               @node-drop="handleDrop"
               @node-click="nodeClick"
               @node-add="addData"
               @node-edit="editData"
+              @node-del="deleteData"
             >
             </operate-tree>
           </div>
@@ -37,8 +39,8 @@
               <Row>
                 <i-Col :xs="24" :sm="12" :md="14" :lg="16">
                   <!--<Button type="primary" icon="android-add" @click="addData">添加</Button>-->
-                  <Button type="primary" icon="edit">修改</Button>
-                  <Button type="error" icon="android-delete">删除</Button>
+                  <Button type="primary" icon="edit" :disabled="showBtn" @click="editData">修改</Button>
+                  <Button type="error" icon="android-delete" :disabled="showBtn" @click="deleteData">删除</Button>
                 </i-Col>
 
                 <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -132,8 +134,8 @@
     </Row>
 
     <!-- 资源表单 -->
-    <Modal :mask-closable="false" v-model="formVisible" :title="formShow">
-      <Form ref="formData" :model="formData" :rules="formValidate" :label-width="80">
+    <Modal :mask-closable="false" v-model="formVisible" :title="fromTitle">
+      <Form ref="formData" :model="formData" :rules="formValidate" :label-width="90">
         <FormItem label="上级资源：" prop="parentName">
           <i-Input v-model="formData.parentName" readonly></i-Input>
           <i-Input v-model="formData.parentId" v-show="false"></i-Input>
@@ -162,12 +164,12 @@
       </Form>
       <div slot="footer">
         <Button @click="formVisible = false">取 消</Button>
-        <Button type="primary">确 定</Button>
+        <Button type="primary" @click="doOperate">确 定</Button>
       </div>
     </Modal>
 
     <!-- 权限表单 -->
-    <Modal :mask-closable="false" v-model="permVisible" :title="formShow">
+    <Modal :mask-closable="false" v-model="permVisible" :title="fromTitle">
       <Form ref="sysPermission" :model="sysPermission" :rules="permValidate" :label-width="80">
         <FormItem label="所属资源" prop="resId">
           <i-Input v-model="sysPermission.resName" readonly></i-Input>
@@ -188,7 +190,7 @@
       </Form>
       <div slot="footer">
         <Button @click="permVisible = false">取 消</Button>
-        <Button type="primary">确 定</Button>
+        <Button type="primary" @click="doOperate">确 定</Button>
       </div>
     </Modal>
   </div>
@@ -200,7 +202,6 @@
   import IconPane from '@/components/icon-pane'
   import DictShow from '@/components/dict-show'
   import DictSelect from '@/components/dict-select'
-  import { reqResourceOperateTree, reqResourceListPage, reqRermissionListPage } from '@/api/resource.js'
   import system from '@/api/system'
 
   export default {
@@ -224,24 +225,38 @@
             return '权限管理'
         }
       },
-      // 表单标题显示
-      formShow () {
-        switch (this.tableType) {
-          case 0:
-            return this.operteType === 0 ? '资源添加' : '资源修改'
-          case 1:
-            return this.operteType === 0 ? '权限添加' : '权限修改'
+      // 表单标题
+      fromTitle () {
+        switch (this.operteType) {
+          case 10:
+            return '添加资源'
+          case 11:
+            return '修改资源'
+          case 12:
+            return '删除资源'
+          case 20:
+            return '添加权限'
+          case 21:
+            return '修改权限'
+          case 22:
+            return '删除权限'
         }
+      },
+      // 操作按钮显示
+      showBtn () {
+        return this.currCol == null
       }
     },
     data () {
       return {
         // 切换操作不同表格 0：资源管理 1：权限管理
         tableType: 0,
-        // 表单操作类型 0：添加1：修改
+        // 表单操作类型
         operteType: 0,
         // 操作树数据
         operateTreeData: [],
+        // 默认展开节点
+        operateExpandedKeys: [1],
         // 操作数据列表
         operateListData: [],
         // 表格加载
@@ -271,19 +286,44 @@
           parentId: null,
           parentName: null,
           type: null,
+          resName: null,
+          resCode: null,
           icon: null,
-          seq: null
+          seq: null,
+          state: null
         },
         // 表单添加初始化
         formAdd: {
           parentId: 0,
           parentName: '',
           type: 0,
+          resName: '',
+          resCode: '',
           icon: '',
-          seq: 0
+          seq: 0,
+          state: 0
         },
         // 表单验证
-        formValidate: {},
+        formValidate: {
+          parentName: [
+            {required: true, message: '父资源不能为空', trigger: 'blur'}
+          ],
+          resName: [
+            {required: true, message: '资源名称不能为空', trigger: 'blur'}
+          ],
+          resCode: [
+            {required: true, message: '资源编码不能为空', trigger: 'blur'}
+          ],
+          type: [
+            {required: true, message: '请选项类型'}
+          ],
+          seq: [
+            {required: true, message: '请选择排序号'}
+          ],
+          state: [
+            {required: true, message: '请选择状态'}
+          ]
+        },
         // 权限表单标识
         permVisible: false,
         // 权限表单模型
@@ -308,7 +348,7 @@
             {required: true, message: '不能为空', trigger: 'blur'}
           ],
           permCode: [
-            {required: true, message: '不能为空', trigger: 'change'}
+            {required: true, message: '不能为空', trigger: 'blur'}
           ]
         }
 
@@ -322,6 +362,11 @@
       })
     },
     methods: {
+      test () {
+        console.log(this.$refs.operateTree.getNode(1))
+        // let tes = this.$refs.operateTree.getNode(1)
+        // console.log(tes)
+      },
       // 切换操作表格
       chageTable () {
         switch (this.tableType) {
@@ -342,7 +387,7 @@
         this.loadListPage()
       },
       loadTreeData () {
-        reqResourceOperateTree().then((data) => {
+        system.reqResourceOperateTree().then((data) => {
           let {code, result} = data
           if (code === 0) {
             this.operateTreeData = result.tree
@@ -356,12 +401,12 @@
         let params = {...this.pageParam, ...this.pageQuery}
         if (this.tableType === 0) {
           // 加载资源表格
-          reqResourceListPage(method, params).then(data => {
+          system.reqResourceListPage(method, params).then(data => {
             this.processListData(data)
           })
         } else {
           // 加载权限表格
-          reqRermissionListPage(method, params).then(data => {
+          system.reqRermissionListPage(method, params).then(data => {
             this.processListData(data)
           })
         }
@@ -443,13 +488,15 @@
       },
       // 添加
       addData (data, node) {
-        if (this.tableType === 0) {
+        // 根节点只能添加资源
+        if (data.resId === 1 || this.tableType === 0) {
+          this.operteType = 10
           this.formVisible = true
           this.formData = JSON.parse(JSON.stringify(this.formAdd))
 
           let children = data.children
           if (children.length > 0) {
-            this.formData.seq = children[children.length - 1].seq * 1 + 1
+            this.formData.seq = children.length + 1
           } else {
             this.formData.seq = 1
           }
@@ -459,28 +506,206 @@
           this.formData.icon = data.icon
           this.formData.state = data.state
         } else {
+          this.operteType = 20
           this.permVisible = true
+          this.sysPermission = JSON.parse(JSON.stringify(this.addPermission))
           this.sysPermission.resId = data.resId
           this.sysPermission.resName = data.resName
         }
       },
       // 编辑
       editData (data, node) {
-        this.formVisible = true
-        system.getResourceInfo(data.resId).then((resData) => {
-          let {code, msg, result} = resData
-          if (code === 0) {
-            this.formData = result
-            for (let item of this.operateListData) {
-              if (this.formData.parentId === item.resId) {
-                this.formData.parentName = item.resName
-                break
+        if (data.resId || (this.tableType === 0 && this.currCol.resId)) {
+          this.operteType = 11
+          this.formVisible = true
+          let resId = data.resId ? data.resId : this.currCol.resId
+          system.reqResourceInfo(resId).then((resData) => {
+            let {code, msg, result} = resData
+            if (code === 0) {
+              this.formData = result
+              let node = this.$refs.operateTree.getNode(result.parentId)
+              if (node) {
+                this.formData.parentName = node.data.resName
               }
+            } else {
+              this.$Message.info(msg)
             }
-          } else {
-            this.$Message.info(msg)
-          }
-        })
+          })
+        } else if (this.tableType === 1 && this.currCol.permId) {
+          this.operteType = 21
+          this.permVisible = true
+          let permId = this.currCol.permId
+          system.reqPermissionInfo(permId).then((resData) => {
+            let {code, msg, result} = resData
+            if (code === 0) {
+              this.sysPermission = result
+              let node = this.$refs.operateTree.getNode(result.resId)
+              if (node) {
+                this.sysPermission.resName = node.data.resName
+              }
+            } else {
+              this.$Message.info(msg)
+            }
+          })
+        }
+      },
+      // 执行删除
+      deleteData (data, node) {
+        if (data.resId || (this.tableType === 0 && this.currCol.resId)) {
+          this.operteType = 12
+          this.doDelete(data.resId ? data : this.currCol)
+        } else if (this.tableType === 1 && this.currCol.permId) {
+          this.operteType = 22
+          this.doDelete(this.currCol)
+        }
+      },
+      doDelete (data) {
+        switch (this.operteType) {
+          // 删除资源
+          case 12:
+            this.$Modal.confirm({
+              title: '提示',
+              content: '<p>此操作将删除资源 ' + data.resName + ', 是否继续?</p>',
+              onOk: () => {
+                system.reqResourceDelete(data.resId).then(resData => {
+                  let {code, msg} = resData
+                  if (code === 0) {
+                    this.$Message.success('删除成功！')
+                    console.log(data.parentId)
+                    this.operateExpandedKeys = [data.parentId]
+                    // this.pageQuery.queryTree = this.currCol.parentId
+                    this.loadListPage()
+                    this.loadTreeData()
+                  } else {
+                    this.$Message.warning(msg)
+                  }
+                })
+              }
+            })
+            break
+          // 删除权限
+          case 22:
+            this.$Modal.confirm({
+              title: '提示',
+              content: '<p>此操作将删除权限 ' + data.permName + ', 是否继续?</p>',
+              onOk: () => {
+                system.reqPermissionDelete(data.permId).then(resData => {
+                  let {code, msg} = resData
+                  if (code === 0) {
+                    this.$Message.success('删除成功！')
+                    this.loadListPage()
+                  } else {
+                    this.$Message.warning(msg)
+                  }
+                })
+              }
+            })
+            break
+        }
+      },
+      // 执行操作
+      doOperate () {
+        switch (this.operteType) {
+          // 添加资源
+          case 10:
+            this.$refs['formData'].validate((valid) => {
+              if (valid) {
+                system.reqResourceSave(this.formData).then(data => {
+                  let {code, msg} = data
+                  if (code === 0) {
+                    this.$Message.success('添加成功')
+                    this.operateExpandedKeys = [this.formData.parentId]
+                    this.pageQuery.queryTree = this.formData.parentId
+                    this.loadListPage()
+                    this.loadTreeData()
+                    this.formVisible = false
+                  } else {
+                    this.$Message.error(msg)
+                  }
+                })
+              }
+            })
+            break
+          // 修改资源
+          case 11:
+            system.reqResourceUpdate(this.formData, this.formData.resId).then(data => {
+              let {code, msg} = data
+              if (code === 0) {
+                this.$Message.success('修改成功')
+                this.operateExpandedKeys = [this.formData.resId]
+                this.loadListPage()
+                this.loadTreeData()
+                this.formVisible = false
+              } else {
+                this.$Message.error(msg)
+              }
+            })
+            break
+          // 删除资源
+          case 12:
+            this.$Modal.confirm({
+              title: '提示',
+              content: '<p>此操作将删除资源 ' + this.currCol.resName + ', 是否继续?</p>',
+              onOk: () => {
+                system.reqResourceDelete(this.currCol.resId).then(data => {
+                  if (data.code === 0) {
+                    this.$Message.success('删除成功！')
+                    this.operateExpandedKeys = [this.currCol.parentId]
+                    // this.pageQuery.queryTree = this.currCol.parentId
+                    this.loadListPage()
+                    this.loadTreeData()
+                  } else {
+                    this.$Message.warning(data.msg)
+                  }
+                })
+              }
+            })
+            break
+          // 添加权限
+          case 20:
+            system.reqPermissionSave(this.sysPermission).then(data => {
+              let {code, msg} = data
+              if (code === 0) {
+                this.$Message.success('添加成功')
+                this.pageQuery.queryTree = this.sysPermission.resId
+                this.loadListPage()
+                this.permVisible = false
+              } else {
+                this.$Message.error(msg)
+              }
+            })
+            break
+          // 修改权限
+          case 21 :
+            system.reqPermissionUpdate(this.sysPermission, this.sysPermission.permId).then(data => {
+              let {code, msg} = data
+              if (code === 0) {
+                this.$Message.success('修改成功')
+                this.loadListPage()
+                this.permVisible = false
+              } else {
+                this.$Message.error(msg)
+              }
+            })
+            break
+          // 删除权限
+          case 22:
+            this.$Modal.confirm({
+              title: '提示',
+              content: '<p>此操作将删除权限 ' + this.currCol.permName + ', 是否继续?</p>',
+              onOk: () => {
+                system.reqResourceDelete(this.currCol.permId).then(data => {
+                  if (data.code === 0) {
+                    this.$Message.success('删除成功！')
+                    this.loadListPage()
+                  } else {
+                    this.$Message.warning(data.msg)
+                  }
+                })
+              }
+            })
+            break
+        }
       }
     }
   }
