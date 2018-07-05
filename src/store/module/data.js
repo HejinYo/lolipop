@@ -1,4 +1,4 @@
-import system from '@/api/system'
+import DictApi from '@/api/system/dict-api'
 
 const data = {
   state: {
@@ -18,7 +18,7 @@ const data = {
     loadDictData: async ({state, commit}, dictCode, refresh) => {
       const setDictData = await new Promise(function (resolve, reject) {
         if (state.dictData[dictCode] === undefined || refresh) {
-          system.getDictByCode(dictCode).then(data => {
+          DictApi.getDictByCode(dictCode).then(data => {
             let {code, result} = data
             if (code === 0) {
               commit('setDictData', {dictCode: dictCode, result: result})

@@ -79,7 +79,7 @@
   import TreeSelect from '@/components/tree-select'
   import TreeSelectMultiple from '@/components/tree-select/tree-select-multiple'
   import OperateTree from '@/components/operate-tree'
-  import { reqResourceOperateTree } from '@/api/resource.js'
+  import ResourceApi from '@/api/system/resource-api'
 
   export default {
     name: 'tree-select-test',
@@ -211,7 +211,7 @@
         console.log(val)
       },
       getResourceTreeData () {
-        reqResourceOperateTree().then((data) => {
+        ResourceApi.reqResourceOperateTree().then((data) => {
           let {code, result} = data
           if (code === 0) {
             this.resData = result.tree

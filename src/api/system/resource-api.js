@@ -1,14 +1,6 @@
 import axios from '@/libs/api.request'
 
-class system {
-  // 获取数据字典项
-  static getDictByCode (code) {
-    return axios.request({
-      url: '/sys/dict/find/' + code,
-      method: 'get'
-    })
-  }
-
+class ResourceApi {
   // 资源管理树数据
   static reqResourceOperateTree () {
     return axios.request({
@@ -21,16 +13,6 @@ class system {
   static reqResourceListPage (method, params, data) {
     return axios.request({
       url: '/sys/resource/listPage',
-      method: method,
-      data: data,
-      params: params
-    })
-  }
-
-  // 权限管理分页查询
-  static reqRermissionListPage (method, params, data) {
-    return axios.request({
-      url: '/sys/permission/listPage',
       method: method,
       data: data,
       params: params
@@ -71,39 +53,13 @@ class system {
     })
   }
 
-  // 获取一个权限详情
-  static reqPermissionInfo (permId) {
+  // 资源树节点拖动
+  static reqResourceDrop (type, resId, inResId) {
     return axios.request({
-      url: '/sys/permission/' + permId,
-      method: 'get'
-    })
-  }
-
-  // 保存权限
-  static reqPermissionSave (data) {
-    return axios.request({
-      url: '/sys/permission',
-      method: 'post',
-      data: data
-    })
-  }
-
-  // 修改权限
-  static reqPermissionUpdate (data, permId) {
-    return axios.request({
-      url: '/sys/permission/' + permId,
-      method: 'put',
-      data: data
-    })
-  }
-
-  // 删除权限
-  static reqPermissionDelete (permId) {
-    return axios.request({
-      url: '/sys/permission/' + permId,
-      method: 'delete'
+      url: '/sys/resource/drop/' + type + '/' + resId + '/' + inResId,
+      method: 'put'
     })
   }
 }
 
-export default system
+export default ResourceApi

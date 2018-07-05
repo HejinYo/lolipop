@@ -21,6 +21,18 @@
         <span>
           <span v-if="data[icon]" class="span-icon"><Icon :type="data.icon"></Icon></span>
           {{ data[label] }}
+
+          <span style="margin-left: 10px" v-if="currData===data[value]">
+            <!--<Button type="info" size="small" @click.stop="addNode(data,node)" icon="plus"></Button>-->
+            <Icon type="plus" @click.stop="addNode(data,node)" size="14" style="margin: 0 3px"></Icon>
+            <span v-if="nodeEdit || data[value]!==1">
+              <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" size="16" style="margin: 0 3px"></Icon>
+              <Icon type="android-delete" @click.stop="delNode(data,node)" size="16" style="margin: 0 3px"></Icon>
+             <!-- <Button type="info" size="small" @click.stop="editNode(data,node)" icon="ios-compose-outline"></Button>
+              <Button type="error" size="small" @click.stop="delNode(data,node)" icon="android-delete"></Button>-->
+            </span>
+          </span>
+
           <Poptip v-if="false" transfer trigger="hover" placement="right">
             <div slot="content" style="width: auto">
                 <Button @click="addNode(data,node)" type="primary" size="small">添加</Button>
@@ -32,7 +44,7 @@
            </Poptip>
           </span>
         <span>
-          <Dropdown transfer trigger="custom" placement="right-start"
+          <Dropdown v-if="false" transfer trigger="custom" placement="right-start"
                     :visible="currData===data[value]" @on-clickoutside="clickoutside">
             <DropdownMenu slot="list">
               <ul class="ivu-dropdown-menu">

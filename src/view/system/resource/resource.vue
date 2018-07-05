@@ -16,7 +16,7 @@
               @node-drop="handleDrop"
               @node-click="nodeClick"
               @node-add="addData"
-              @node-edit="editData"
+              @node-edit="treeEdit"
               @node-del="deleteData"
             >
             </operate-tree>
@@ -163,7 +163,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="formVisible = false">取 消</Button>
+        <Button @click="cancal">取 消</Button>
         <Button type="primary" @click="doOperate">确 定</Button>
       </div>
     </Modal>
@@ -189,7 +189,7 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button @click="permVisible = false">取 消</Button>
+        <Button @click="cancal">取 消</Button>
         <Button type="primary" @click="doOperate">确 定</Button>
       </div>
     </Modal>
@@ -202,7 +202,8 @@
   import IconPane from '@/components/icon-pane'
   import DictShow from '@/components/dict-show'
   import DictSelect from '@/components/dict-select'
-  import system from '@/api/system'
+  import ResourceApi from '@/api/system/resource-api'
+  import PermissionApi from '@/api/system/permission-api'
 
   export default {
     name: 'sys-resource',
@@ -290,7 +291,7 @@
           resCode: null,
           icon: null,
           seq: null,
-          state: null
+          state: 0
         },
         // 表单添加初始化
         formAdd: {
@@ -332,7 +333,7 @@
           resName: null,
           permName: null,
           permCode: null,
-          state: null
+          state: 0
         },
         // 权限表单添加初始化
         addPermission: {
@@ -387,7 +388,7 @@
         this.loadListPage()
       },
       loadTreeData () {
-        system.reqResourceOperateTree().then((data) => {
+        ResourceApi.reqResourceOperateTree().then((data) => {
           let {code, result} = data
           if (code === 0) {
             this.operateTreeData = result.tree
@@ -400,13 +401,17 @@
         let method = 'get'
         let params = {...this.pageParam, ...this.pageQuery}
         if (this.tableType === 0) {
+          if (this.pageParam.sidx === null) {
+            this.pageParam.sidx = 'parentId, seq'
+            this.pageParam.sort = 'asc'
+          }
           // 加载资源表格
-          system.reqResourceListPage(method, params).then(data => {
+          ResourceApi.reqResourceListPage(method, params).then(data => {
             this.processListData(data)
           })
         } else {
           // 加载权限表格
-          system.reqRermissionListPage(method, params).then(data => {
+          PermissionApi.reqPermissionListPage(method, params).then(data => {
             this.processListData(data)
           })
         }
@@ -432,7 +437,7 @@
       },
       // 表格行双击
       rowDbClick (data) {
-
+        this.editData()
       },
       // 表格排序
       sortChange (val) {
@@ -467,24 +472,36 @@
       },
       // 被拖拽节点对应的 Node、结束拖拽时最后进入的节点、被拖拽节点的放置位置（before、after、inner）、event
       handleDrop (node, innerNode, location, event) {
-        switch (location) {
-          case 'before':
-            console.log('节点前')
-            break
-          case 'after':
-            console.log('节点后')
-            break
-          case 'inner':
-            console.log('插入节点')
-            break
-        }
-        console.log('node:', node)
-        console.log('innerNode:', innerNode)
+        // 被拖拽节点数据
+        let currData = node.data
+        // 进入节点数据
+        let innerData = innerNode.data
+        ResourceApi.reqResourceDrop(location, currData.resId, innerData.resId).then(data => {
+          let {code, msg} = data
+          this.operateExpandedKeys = [currData.resId]
+          this.loadTreeData()
+          if (code === 0) {
+            this.$Message.success('修改成功')
+            this.loadListPage()
+          } else {
+            this.$Message.error(msg)
+          }
+        })
       },
       // 树节点点击
       nodeClick (data, node, ref) {
         this.pageQuery.queryTree = data.resId === 1 ? null : data.resId
         this.loadListPage()
+      },
+      // 取消操作
+      cancal () {
+        if (this.operteType === 10 || this.operteType === 11) {
+          this.resetForm('formData')
+          this.formVisible = false
+        } else if (this.operteType === 20 || this.operteType === 21) {
+          this.resetForm('sysPermission')
+          this.permVisible = false
+        }
       },
       // 添加
       addData (data, node) {
@@ -513,13 +530,31 @@
           this.sysPermission.resName = data.resName
         }
       },
+      // 树节点编辑
+      treeEdit (data, node) {
+        this.operteType = 11
+        this.formVisible = true
+        let resId = data.resId
+        ResourceApi.reqResourceInfo(resId).then((resData) => {
+          let {code, msg, result} = resData
+          if (code === 0) {
+            this.formData = result
+            let node = this.$refs.operateTree.getNode(result.parentId)
+            if (node) {
+              this.formData.parentName = node.data.resName
+            }
+          } else {
+            this.$Message.info(msg)
+          }
+        })
+      },
       // 编辑
-      editData (data, node) {
-        if (data.resId || (this.tableType === 0 && this.currCol.resId)) {
+      editData () {
+        if (this.tableType === 0 && this.currCol.resId) {
           this.operteType = 11
           this.formVisible = true
-          let resId = data.resId ? data.resId : this.currCol.resId
-          system.reqResourceInfo(resId).then((resData) => {
+          let resId = this.currCol.resId
+          ResourceApi.reqResourceInfo(resId).then((resData) => {
             let {code, msg, result} = resData
             if (code === 0) {
               this.formData = result
@@ -535,7 +570,7 @@
           this.operteType = 21
           this.permVisible = true
           let permId = this.currCol.permId
-          system.reqPermissionInfo(permId).then((resData) => {
+          PermissionApi.reqPermissionInfo(permId).then((resData) => {
             let {code, msg, result} = resData
             if (code === 0) {
               this.sysPermission = result
@@ -565,13 +600,12 @@
           case 12:
             this.$Modal.confirm({
               title: '提示',
-              content: '<p>此操作将删除资源 ' + data.resName + ', 是否继续?</p>',
+              content: '<p>此操作将删除资源 <span style="color: red;">' + data.resName + '</span>, 是否继续?</p>',
               onOk: () => {
-                system.reqResourceDelete(data.resId).then(resData => {
+                ResourceApi.reqResourceDelete(data.resId).then(resData => {
                   let {code, msg} = resData
                   if (code === 0) {
                     this.$Message.success('删除成功！')
-                    console.log(data.parentId)
                     this.operateExpandedKeys = [data.parentId]
                     // this.pageQuery.queryTree = this.currCol.parentId
                     this.loadListPage()
@@ -587,9 +621,9 @@
           case 22:
             this.$Modal.confirm({
               title: '提示',
-              content: '<p>此操作将删除权限 ' + data.permName + ', 是否继续?</p>',
+              content: '<p>此操作将删除权限 <span style="color: red;">' + data.permName + '</span>, 是否继续?</p>',
               onOk: () => {
-                system.reqPermissionDelete(data.permId).then(resData => {
+                PermissionApi.reqPermissionDelete(data.permId).then(resData => {
                   let {code, msg} = resData
                   if (code === 0) {
                     this.$Message.success('删除成功！')
@@ -610,7 +644,7 @@
           case 10:
             this.$refs['formData'].validate((valid) => {
               if (valid) {
-                system.reqResourceSave(this.formData).then(data => {
+                ResourceApi.reqResourceSave(this.formData).then(data => {
                   let {code, msg} = data
                   if (code === 0) {
                     this.$Message.success('添加成功')
@@ -628,7 +662,7 @@
             break
           // 修改资源
           case 11:
-            system.reqResourceUpdate(this.formData, this.formData.resId).then(data => {
+            ResourceApi.reqResourceUpdate(this.formData, this.formData.resId).then(data => {
               let {code, msg} = data
               if (code === 0) {
                 this.$Message.success('修改成功')
@@ -647,7 +681,7 @@
               title: '提示',
               content: '<p>此操作将删除资源 ' + this.currCol.resName + ', 是否继续?</p>',
               onOk: () => {
-                system.reqResourceDelete(this.currCol.resId).then(data => {
+                ResourceApi.reqResourceDelete(this.currCol.resId).then(data => {
                   if (data.code === 0) {
                     this.$Message.success('删除成功！')
                     this.operateExpandedKeys = [this.currCol.parentId]
@@ -663,7 +697,7 @@
             break
           // 添加权限
           case 20:
-            system.reqPermissionSave(this.sysPermission).then(data => {
+            PermissionApi.reqPermissionSave(this.sysPermission).then(data => {
               let {code, msg} = data
               if (code === 0) {
                 this.$Message.success('添加成功')
@@ -677,7 +711,7 @@
             break
           // 修改权限
           case 21 :
-            system.reqPermissionUpdate(this.sysPermission, this.sysPermission.permId).then(data => {
+            PermissionApi.reqPermissionUpdate(this.sysPermission, this.sysPermission.permId).then(data => {
               let {code, msg} = data
               if (code === 0) {
                 this.$Message.success('修改成功')
@@ -694,7 +728,7 @@
               title: '提示',
               content: '<p>此操作将删除权限 ' + this.currCol.permName + ', 是否继续?</p>',
               onOk: () => {
-                system.reqResourceDelete(this.currCol.permId).then(data => {
+                ResourceApi.reqResourceDelete(this.currCol.permId).then(data => {
                   if (data.code === 0) {
                     this.$Message.success('删除成功！')
                     this.loadListPage()
