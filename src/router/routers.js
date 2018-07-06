@@ -60,6 +60,26 @@ export default [
     component: Main,
     children: [
       {
+        path: 'resource',
+        name: 'resource',
+        meta: {
+          icon: 'briefcase',
+          title: '资源管理',
+          access: ['sys:resource:view']
+        },
+        component: () => import('@/view/system/resource')
+      },
+      {
+        path: 'dept',
+        name: 'dept',
+        meta: {
+          icon: 'compass',
+          title: '部门管理',
+          access: ['sys:dept:view']
+        },
+        component: () => import('@/view/system/dept')
+      },
+      {
         path: 'user',
         name: 'user',
         meta: {icon: 'person-stalker', title: '用户管理', requireAuth: true},
@@ -74,17 +94,6 @@ export default [
           requireAuth: true
         },
         component: () => import('@/view/multilevel/level-1.vue')
-      },
-      {
-        path: 'resource',
-        name: 'resource',
-        meta: {
-          icon: 'briefcase',
-          title: '资源管理',
-          requireAuth: true,
-          notCache: false
-        },
-        component: () => import('@/view/system/resource')
       },
       {
         path: 'log',

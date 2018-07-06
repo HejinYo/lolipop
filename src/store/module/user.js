@@ -1,4 +1,4 @@
-import { login, logout, reqUserInfo, reqUserMenu, reqUserPerm } from '@/api/user'
+import UserApi from '@/api/system/user-api'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -50,10 +50,10 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin ({ commit }, {userName, userpwd}) {
+    handleLogin ({commit}, {userName, userpwd}) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
-        login({ userName, userpwd }).then(res => {
+        UserApi.login({userName, userpwd}).then(res => {
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -61,9 +61,9 @@ export default {
       })
     },
     // 退出登录
-    handleLogOut ({ state, commit }) {
+    handleLogOut ({state, commit}) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        UserApi.logout(state.token).then(() => {
           commit('setToken', '')
           commit('setAccess', [])
           resolve()
@@ -77,9 +77,9 @@ export default {
       })
     },
     // 获取用户相关信息
-    getUserInfo ({ state, commit }) {
+    getUserInfo ({state, commit}) {
       return new Promise((resolve, reject) => {
-        reqUserInfo().then(data => {
+        UserApi.reqUserInfo().then(data => {
           let {result} = data
           commit('setAvator', result.avatar)
           commit('setUserName', result.nickName)
@@ -92,11 +92,11 @@ export default {
       })
     },
     // 获取用户权限
-    getUserPerm ({ state, commit }, refresh) {
+    getUserPerm ({state, commit}, refresh) {
       return new Promise((resolve, reject) => {
         // 是否从缓存获取
         if (state.access.length === 0 || refresh) {
-          reqUserPerm().then(data => {
+          UserApi.reqUserPerm().then(data => {
             let {code, result} = data
             if (code === 0) {
               commit('setAccess', result)
@@ -113,9 +113,9 @@ export default {
       })
     },
     // 获取用户左侧菜单
-    getUserMenu ({ state, commit }) {
+    getUserMenu ({state, commit}) {
       return new Promise((resolve, reject) => {
-        reqUserMenu().then(data => {
+        UserApi.reqUserMenu().then(data => {
           let {code, result} = data
           if (code === 0) {
             commit('setMenuList', result)

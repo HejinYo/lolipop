@@ -13,7 +13,7 @@
         highlight-current
         :filter-node-method="filterNode"
         @node-click="handleNodeClick"
-        draggable
+        :draggable="draggable"
         @node-drop="handleDrop"
         @node-contextmenu="handleContextmenu"
       >
@@ -23,28 +23,15 @@
           {{ data[label] }}
 
           <span style="margin-left: 10px" v-if="currData===data[value]">
-            <!--<Button type="info" size="small" @click.stop="addNode(data,node)" icon="plus"></Button>-->
-            <Icon type="plus" @click.stop="addNode(data,node)" size="14" style="margin: 0 3px"></Icon>
-            <span v-if="nodeEdit || data[value]!==1">
-              <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" size="16" style="margin: 0 3px"></Icon>
-              <Icon type="android-delete" @click.stop="delNode(data,node)" size="16" style="margin: 0 3px"></Icon>
-             <!-- <Button type="info" size="small" @click.stop="editNode(data,node)" icon="ios-compose-outline"></Button>
-              <Button type="error" size="small" @click.stop="delNode(data,node)" icon="android-delete"></Button>-->
+            <Icon type="plus" @click.stop="addNode(data,node)" v-if="nodeAdd" size="14" class="operate-btn"></Icon>
+            <span v-if="data[value]!==1">
+              <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" v-if="rootEdit || nodeEdit" size="16" class="operate-btn"></Icon>
+              <Icon type="android-delete" @click.stop="delNode(data,node)" v-if="nodeDel" size="16" class="operate-btn"></Icon>
             </span>
           </span>
-
-          <Poptip v-if="false" transfer trigger="hover" placement="right">
-            <div slot="content" style="width: auto">
-                <Button @click="addNode(data,node)" type="primary" size="small">添加</Button>
-                <span v-if="nodeEdit || data[value]!==1">
-                  <Button @click="editNode(data,node)" type="info" size="small">修改</Button>
-                  <Button @click="delNode(data,node)" type="error" size="small">删除</Button>
-                </span>
-            </div>
-           </Poptip>
-          </span>
-        <span>
-          <Dropdown v-if="false" transfer trigger="custom" placement="right-start"
+        </span>
+        <!--<span >
+          <Dropdown transfer trigger="custom" placement="right-start"
                     :visible="currData===data[value]" @on-clickoutside="clickoutside">
             <DropdownMenu slot="list">
               <ul class="ivu-dropdown-menu">
@@ -54,7 +41,7 @@
                </ul>
             </DropdownMenu>
           </Dropdown>
-        </span>
+        </span>-->
         <span>
         </span>
       </span>
@@ -91,10 +78,7 @@
         type: Boolean,
         default: false
       },
-      nodeEdit: {
-        type: Boolean,
-        default: false
-      },
+      // 树数据
       data: {
         type: Array,
         default: []
@@ -105,6 +89,31 @@
         default: () => {
           return [1]
         }
+      },
+      // 可拖动节点
+      draggable: {
+        type: Boolean,
+        default: false
+      },
+      // 显示节点添加按钮
+      nodeAdd: {
+        type: Boolean,
+        default: false
+      },
+      // 显示节点修改按钮
+      nodeEdit: {
+        type: Boolean,
+        default: false
+      },
+      // 显示节点删除按钮
+      nodeDel: {
+        type: Boolean,
+        default: false
+      },
+      // 根节点可修改按钮
+      rootEdit: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {
@@ -183,7 +192,11 @@
       padding-bottom: 5px;
     }
     .span-icon {
-      padding-right: 4px
+      padding-right: 4px;
+    }
+
+    .operate-btn {
+      margin: 0 3px;
     }
 
   }

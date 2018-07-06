@@ -10,12 +10,18 @@ import importDirective from '@/directive'
 import 'iview/dist/styles/iview.css'
 import '@/assets/icons/iconfont.css'
 import { Tree, Checkbox, Table, TableColumn, Loading } from 'element-ui'
+import PermCheck from '@/libs/perm-check'
+
 // require('@/mock')
 
 Vue.use(iView)
 Vue.config.productionTip = false
 /**
- * @description 全局注册应用配置config
+ * 注册全局权限检查
+ */
+Vue.prototype.PermCheck = PermCheck
+/**
+ * 全局注册应用配置config
  */
 Vue.prototype.$config = config
 /**

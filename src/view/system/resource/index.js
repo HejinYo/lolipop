@@ -1,3 +1,3 @@
-import resource from './resource.vue'
+import resource from './sys-resource.vue'
 
 export default resource
