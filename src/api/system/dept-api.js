@@ -1,6 +1,14 @@
 import axios from '@/libs/api.request'
 
 class DeptApi {
+  // 部门选择树数据
+  static reqDeptSelect () {
+    return axios.request({
+      url: '/sys/dept/select',
+      method: 'get'
+    })
+  }
+
   // 部门管理树数据
   static reqDeptOperateTree () {
     return axios.request({

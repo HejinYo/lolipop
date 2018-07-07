@@ -1,4 +1,4 @@
-import UserApi from '@/api/system/user-api'
+import LoginApi from '@/api/system/login-api'
 import { setToken, getToken } from '@/libs/util'
 
 export default {
@@ -53,7 +53,7 @@ export default {
     handleLogin ({commit}, {userName, userpwd}) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
-        UserApi.login({userName, userpwd}).then(res => {
+        LoginApi.login({userName, userpwd}).then(res => {
           resolve(res)
         }).catch(err => {
           reject(err)
@@ -63,7 +63,7 @@ export default {
     // 退出登录
     handleLogOut ({state, commit}) {
       return new Promise((resolve, reject) => {
-        UserApi.logout(state.token).then(() => {
+        LoginApi.logout(state.token).then(() => {
           commit('setToken', '')
           commit('setAccess', [])
           resolve()
@@ -79,7 +79,7 @@ export default {
     // 获取用户相关信息
     getUserInfo ({state, commit}) {
       return new Promise((resolve, reject) => {
-        UserApi.reqUserInfo().then(data => {
+        LoginApi.reqUserInfo().then(data => {
           let {result} = data
           commit('setAvator', result.avatar)
           commit('setUserName', result.nickName)
@@ -96,7 +96,7 @@ export default {
       return new Promise((resolve, reject) => {
         // 是否从缓存获取
         if (state.access.length === 0 || refresh) {
-          UserApi.reqUserPerm().then(data => {
+          LoginApi.reqUserPerm().then(data => {
             let {code, result} = data
             if (code === 0) {
               commit('setAccess', result)
@@ -115,7 +115,7 @@ export default {
     // 获取用户左侧菜单
     getUserMenu ({state, commit}) {
       return new Promise((resolve, reject) => {
-        UserApi.reqUserMenu().then(data => {
+        LoginApi.reqUserMenu().then(data => {
           let {code, result} = data
           if (code === 0) {
             commit('setMenuList', result)

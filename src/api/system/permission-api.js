@@ -1,6 +1,14 @@
 import axios from '@/libs/api.request'
 
 class PermissionApi {
+  // 获取授权树
+  static reqPermissionAuthTree () {
+    return axios.request({
+      url: '/sys/permission/authTree',
+      method: 'get'
+    })
+  }
+
   // 权限管理分页查询
   static reqPermissionListPage (method, params, data) {
     return axios.request({

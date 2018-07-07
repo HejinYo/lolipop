@@ -1,51 +1,47 @@
 import axios from '@/libs/api.request'
 
 class UserApi {
-  // 用户登录
-  static login ({userName, userpwd}) {
+  // 用户管理分页查询
+  static reqUserListPage (method, params, data) {
     return axios.request({
-      url: 'login',
-      data: {userName, userpwd},
-      method: 'post'
+      url: '/sys/user/listPage',
+      method: method,
+      data: data,
+      params: params
     })
   }
 
-  // 重新获取用户信息
-  static reqUserInfo () {
+  // 获取一个用户详情
+  static reqUserInfo (resId) {
     return axios.request({
-      url: 'userInfo',
+      url: '/sys/user/' + resId,
       method: 'get'
     })
   }
 
-  // 获取用户菜单
-  static reqUserMenu () {
+  // 保存用户
+  static reqUserSave (data) {
     return axios.request({
-      url: 'userMenu',
-      method: 'get'
+      url: '/sys/user',
+      method: 'post',
+      data: data
     })
   }
 
-  // 获取用户权限
-  static reqUserPerm () {
+  // 修改用户
+  static reqUserUpdate (data, resId) {
     return axios.request({
-      url: 'userPerm',
-      method: 'get'
+      url: '/sys/user/' + resId,
+      method: 'put',
+      data: data
     })
   }
 
-  // 获取用户角色
-  static reqUserRole () {
+  // 删除用户
+  static reqUserDelete (resId) {
     return axios.request({
-      url: 'userRole',
-      method: 'get'
-    })
-  }
-
-  static logout (token) {
-    return axios.request({
-      url: 'logout',
-      method: 'put'
+      url: '/sys/user/' + resId,
+      method: 'delete'
     })
   }
 }

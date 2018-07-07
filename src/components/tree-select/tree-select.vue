@@ -1,19 +1,34 @@
 <template>
-  <i-select :label-in-value="true" v-model="select" :placeholder="placeholder">
-    <i-option v-show="false" v-for="item in data.list" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-    <el-tree ref="tree" highlight-current default-expand-all :expand-on-click-node="false" node-key="value" :props="defaultProps"
-             :data="data.tree" @node-click="nodeClick"></el-tree>
-  </i-select>
+  <div>
+    <i-select v-model="select" :placeholder="placeholder">
+      <i-option v-show="false" v-for="item in data.list" :value="item[value]" :key="item[value]">{{ item[label] }}</i-option>
+      <el-tree ref="tree" highlight-current default-expand-all :expand-on-click-node="false" :node-key="value" :props="defaultProps"
+               :data="data.tree" @node-click="nodeClick"></el-tree>
+    </i-select>
+  </div>
 </template>
 <script>
   export default {
     name: 'tree-select',
     props: {
+      name: null,
       select: null,
       // 选择框默认文字
       placeholder: {
         type: String,
         default: '请选择'
+      },
+      label: {
+        type: String,
+        default: 'label'
+      },
+      value: {
+        type: String,
+        default: 'value'
+      },
+      children: {
+        type: String,
+        default: 'children'
       },
       // select和tree数据
       data: {
@@ -24,24 +39,22 @@
             tree: []
           }
         }
-      },
-      // 数据的key value
-      defaultProps: {
-        default: function () {
-          return {
-            children: 'children',
-            label: 'label'
-          }
-        }
       }
     },
     data () {
-      return {}
+      return {
+        selectModel: 7,
+        // 数据的key value
+        defaultProps: {
+          children: this.children,
+          label: this.label
+        }
+      }
     },
     methods: {
       nodeClick (val) {
-        this.$emit('update:select', val.value)
-        this.$emit('node-click', val.value)
+        this.$emit('update:select', val[this.value])
+        this.$emit('update:name', val[this.label])
       }
     },
     watch: {
@@ -58,5 +71,4 @@
   }
 </script>
 <style>
-
 </style>

@@ -80,20 +80,24 @@ export default [
         component: () => import('@/view/system/dept')
       },
       {
-        path: 'user',
-        name: 'user',
-        meta: {icon: 'person-stalker', title: '用户管理', requireAuth: true},
-        component: () => import('@/view/multilevel/level-1.vue')
-      },
-      {
         path: 'role',
         name: 'role',
         meta: {
           icon: 'ios-paw',
           title: '角色管理',
-          requireAuth: true
+          access: ['sys:role:view']
         },
-        component: () => import('@/view/multilevel/level-1.vue')
+        component: () => import('@/view/system/role')
+      },
+      {
+        path: 'user',
+        name: 'user',
+        meta: {
+          icon: 'person-stalker',
+          title: '用户管理',
+          access: ['sys:user:view']
+        },
+        component: () => import('@/view/system/user')
       },
       {
         path: 'log',
