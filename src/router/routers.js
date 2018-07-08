@@ -50,12 +50,20 @@ export default [
     ]
   },
   {
+    path: '',
+    name: 'doc',
+    meta: {
+      title: '文档',
+      href: 'https://lison16.github.io/iview-admin-doc/#/',
+      icon: 'ios-book'
+    }
+  },
+  {
     path: '/system',
     name: 'system',
     meta: {
       icon: 'ios-cog',
-      title: '系统管理',
-      requireAuth: true
+      title: '系统管理'
     },
     component: Main,
     children: [
