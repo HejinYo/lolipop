@@ -108,6 +108,15 @@ export default [
         component: () => import('@/view/system/user')
       },
       {
+        path: 'dict',
+        name: 'dict',
+        meta: {
+          icon: 'cube',
+          title: '数据字典'
+        },
+        component: () => import('@/view/system/dict')
+      },
+      {
         path: 'log',
         name: 'log',
         meta: {

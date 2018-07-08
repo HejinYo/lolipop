@@ -1,6 +1,19 @@
 <template>
   <div class="operate-tree">
-    <i-Input v-model="filterText" placeholder="过滤节点" clearable class="filter-input"></i-Input>
+    <i-Input v-model="filterText" placeholder="过滤节点" clearable class="filter-input">
+      <span slot="prepend">
+        <span class="filter-btn">
+          <Button size="small" @click="handleRoot">
+            <Icon type="home"></Icon>
+          </Button>
+        </span>
+        <span v-if="rootAddShow" class="filter-btn">
+          <Button v-if="rootAddShow" size="small" @click="rootAdd">
+            <Icon type="plus"></Icon>
+          </Button>
+        </span>
+      </span>
+    </i-Input>
     <div :style="{ height: `${this.clientHeight - 240}px`,overflowY: 'auto'}">
       <el-tree
         :data="data"
@@ -20,14 +33,15 @@
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>
           <span v-if="data[icon]" class="span-icon"><Icon :type="data.icon"></Icon></span>
-          {{ data[label] }}
-
-          <span style="margin-left: 10px" v-if="currData===data[value]">
+          <!-- 显示label -->
+          <span v-if="showLabel">{{ data[label] }}</span>
+          <!-- 自定义显示albel -->
+          <slot :data="data" :node="node"></slot>
+          <!-- 操作按钮 -->
+          <span v-if="currData===data[value]">
             <Icon type="plus" @click.stop="addNode(data,node)" v-if="nodeAdd" size="14" class="operate-btn"></Icon>
-            <span v-if="data[value]!==1">
-              <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" v-if="rootEdit || nodeEdit" size="16" class="operate-btn"></Icon>
-              <Icon type="android-delete" @click.stop="delNode(data,node)" v-if="nodeDel" size="16" class="operate-btn"></Icon>
-            </span>
+            <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" v-if="nodeEdit" size="16" class="operate-btn"></Icon>
+            <Icon type="android-delete" @click.stop="delNode(data,node)" v-if="nodeDel" size="16" class="operate-btn"></Icon>
           </span>
         </span>
         <!--<span >
@@ -42,8 +56,6 @@
             </DropdownMenu>
           </Dropdown>
         </span>-->
-        <span>
-        </span>
       </span>
       </el-tree>
     </div>
@@ -56,6 +68,11 @@
   export default {
     name: 'operate-tree',
     props: {
+      // label 是否显示
+      showLabel: {
+        type: Boolean,
+        default: true
+      },
       label: {
         type: String,
         default: 'label'
@@ -95,6 +112,11 @@
         type: Boolean,
         default: false
       },
+      // 根节点显示添加按钮
+      rootAddShow: {
+        type: Boolean,
+        default: false
+      },
       // 显示节点添加按钮
       nodeAdd: {
         type: Boolean,
@@ -107,11 +129,6 @@
       },
       // 显示节点删除按钮
       nodeDel: {
-        type: Boolean,
-        default: false
-      },
-      // 根节点可修改按钮
-      rootEdit: {
         type: Boolean,
         default: false
       }
@@ -130,8 +147,12 @@
       }
     },
     methods: {
-      test (data, node) {
-        alert(data.resName)
+      // 根节点
+      rootNode () {
+        let data = {}
+        data[this.value] = 1
+        data[this.label] = '根节点'
+        return data
       },
       // 节点过滤
       filterNode (value, data) {
@@ -141,7 +162,22 @@
       // 树节点点击
       handleNodeClick (data, node, ref) {
         this.currData = null
+        /* if (this.currentKey && this.currentKey === data[this.value]) {
+           // 取消选中
+           this.currentKey = null
+           this.$refs.operateTree.setCurrentKey(this.currentKey)
+         } else {
+           this.currentKey = data[this.value]
+         } */
         this.$emit('node-click', data, node, ref)
+      },
+      // 根节点添加按钮事件
+      rootAdd () {
+        this.$emit('root-add', this.rootNode())
+      },
+      // 根节点点击事件
+      handleRoot () {
+        this.$emit('root-load', this.rootNode())
       },
       // 添加节点
       addNode (data, node) {
@@ -191,6 +227,11 @@
     .filter-input {
       padding-bottom: 5px;
     }
+
+    .filter-btn {
+      margin: 0 5px;
+    }
+
     .span-icon {
       padding-right: 4px;
     }
@@ -200,5 +241,6 @@
     }
 
   }
+
 
 </style>

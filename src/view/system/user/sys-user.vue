@@ -13,7 +13,8 @@
               icon="icon"
               :defaultExpandAll="true"
               :accordion="false"
-              @node-click="nodeClick">
+              @node-click="nodeClick"
+              @root-load="loadRoot">
             </operate-tree>
           </div>
         </Card>
@@ -375,6 +376,11 @@
       // 查询重置
       searchRset () {
         this.pageQuery.queryValue = null
+        this.loadListPage()
+      },
+      // 根节点点击
+      loadRoot () {
+        this.pageQuery.queryTree = null
         this.loadListPage()
       },
       // 树节点点击

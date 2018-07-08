@@ -16,6 +16,9 @@
               :draggable="true"
               @node-drop="handleDrop"
               @node-click="nodeClick"
+              :rootAddShow="true"
+              @root-add="addRoot"
+              @root-load="loadRoot"
               @node-add="addData"
               @node-edit="treeEdit"
               @node-del="deleteData"
@@ -511,10 +514,23 @@
           this.permVisible = false
         }
       },
+      // 根节点添加
+      addRoot (data) {
+        this.operteType = 10
+        this.formVisible = true
+        this.formModel = JSON.parse(JSON.stringify(this.formAdd))
+        this.formModel.seq = this.operateTreeData.length + 1
+        this.formModel.parentId = data.resId
+        this.formModel.parentName = data.resName
+      },
+      // 根节点点击
+      loadRoot () {
+        this.pageQuery.queryTree = null
+        this.loadListPage()
+      },
       // 添加
       addData (data, node) {
-        // 根节点只能添加资源
-        if (data.resId === 1 || this.tableType === 0) {
+        if (this.tableType === 0) {
           this.operteType = 10
           this.formVisible = true
           this.formModel = JSON.parse(JSON.stringify(this.formAdd))
