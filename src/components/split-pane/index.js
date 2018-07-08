@@ -1,3 +1,2 @@
-import SplitPane from './split-pane.vue'
-
-export default SplitPane
+import Split from './split.vue'
+export default Split

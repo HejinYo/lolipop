@@ -50,6 +50,9 @@
     watch: {
       icon (val) {
         this.currIcon = val
+      },
+      currIcon (val) {
+        this.$emit('update:icon', val)
       }
     }
   }

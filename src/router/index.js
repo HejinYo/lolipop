@@ -7,7 +7,8 @@ import { getToken, getLockStatus, canTurnTo } from '@/libs/util'
 
 Vue.use(Router)
 const router = new Router({
-  routes
+  routes,
+  mode: 'history'
 })
 const LOCK_PAGE_NAME = 'lock_page'
 const LOGIN_PAGE_NAME = 'login'

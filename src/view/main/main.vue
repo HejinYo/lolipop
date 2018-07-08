@@ -98,7 +98,6 @@
         'getUserMenu'
       ]),
       turnToPage (name) {
-        console.log(name)
         if (name.indexOf('isTurnByHref_') > -1) {
           window.open(name.split('_')[1])
           return

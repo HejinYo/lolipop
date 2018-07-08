@@ -528,7 +528,7 @@
           this.formModel.parentId = data.resId
           this.formModel.parentName = data.resName
           this.formModel.type = data.type
-          this.formModel.icon = data.icon
+          // this.formModel.icon = data.icon
           this.formModel.state = data.state
         } else {
           this.operteType = 20

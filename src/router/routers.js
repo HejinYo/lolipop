@@ -146,16 +146,53 @@ export default [
           requireAuth: true
         },
         component: () => import('@/view/test-page/tree-select-test.vue')
+      }
+    ]
+  },
+  {
+    path: '/components',
+    name: 'components',
+    meta: {
+      icon: 'social-buffer',
+      title: '组件'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'split_pane_page',
+        name: 'split_pane_page',
+        meta: {
+          icon: 'pause',
+          title: '分割窗口'
+        },
+        component: () => import('@/view/components/split-pane/split-pane.vue')
       },
       {
-        path: 'split-pane',
-        name: 'split-pane',
+        path: 'markdown_page',
+        name: 'markdown_page',
         meta: {
-          icon: 'ios-pause',
-          title: 'split-pane',
-          requireAuth: false
+          icon: 'social-markdown',
+          title: 'Markdown编辑器'
         },
-        component: () => import('@/components/split-pane/split-pane-page.vue')
+        component: () => import('@/view/components/markdown/markdown.vue')
+      },
+      {
+        path: 'editor_page',
+        name: 'editor_page',
+        meta: {
+          icon: 'compose',
+          title: '富文本编辑器'
+        },
+        component: () => import('@/view/components/editor/editor.vue')
+      },
+      {
+        path: 'icons_page',
+        name: 'icons_page',
+        meta: {
+          icon: '_bear',
+          title: '自定义图标'
+        },
+        component: () => import('@/view/components/icons/icons.vue')
       }
     ]
   },
