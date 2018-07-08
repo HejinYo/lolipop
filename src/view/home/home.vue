@@ -7,7 +7,7 @@
     <Row :gutter="10">
       <Col :md="24" :lg="8">
         <!-- 个人信息 -->
-        <Row class-name="home-page-row1" :gutter="10">
+        <Row :gutter="20">
           <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
             <Card>
               <Row type="flex" class="user-infor">
@@ -44,93 +44,79 @@
           </Col>
         </Row>
       </Col>
-      <Col :md="24" :lg="8">
+      <Col :md="24" :lg="16">
         <!-- 数字渐变列表 -->
-        <Row :gutter="5">
-          <Col :xs="24" :sm="12" :md="12" :style="{marginBottom: '10px'}">
-            <infor-card
-              id-name="user_created_count"
-              :end-val="count.createUser"
-              iconType="android-person-add"
-              color="#2d8cf0"
-              intro-text="今日新增用户"
-            ></infor-card>
-          </Col>
-          <Col :xs="24" :sm="12" :md="12" :style="{marginBottom: '10px'}">
-            <infor-card
-              id-name="visit_count"
-              :end-val="count.visit"
-              iconType="ios-eye"
-              color="#64d572"
-              :iconSize="50"
-              intro-text="今日浏览量"
-            ></infor-card>
-          </Col>
-          <Col :xs="24" :sm="12" :md="12" :style="{marginBottom: '10px'}">
-            <infor-card
-              id-name="collection_count"
-              :end-val="count.collection"
-              iconType="upload"
-              color="#ffd572"
-              intro-text="今日数据采集量"
-            ></infor-card>
-          </Col>
-          <Col :xs="24" :sm="12" :md="12" :style="{marginBottom: '10px'}">
-            <infor-card
-              id-name="transfer_count"
-              :end-val="count.transfer"
-              iconType="shuffle"
-              color="#f25e43"
-              intro-text="今日服务调用量"
-            ></infor-card>
-          </Col>
+        <Row :gutter="20">
+          <i-col :xs="12" :sm="8" :md="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" :style="{marginBottom: '10px',height: '110px'}">
+            <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
+              <count-to :end="infor.count" count-class="count-style"/>
+              <p>{{ infor.title }}</p>
+            </infor-card>
+          </i-col>
         </Row>
       </Col>
     </Row>
-    <Row :gutter="10" class="margin-top-10">
-      <!-- 上周每日来访量统计 -->
-      <Col :md="24" :lg="8" :style="{marginBottom: '10px'}">
-        <Card>
-          <p slot="title" class="card-title">
-            <Icon type="android-map"></Icon>
-            上周每日来访量统计
-          </p>
-          <div class="data-source-row">
-            <visite-volume></visite-volume>
-          </div>
+    <Row :gutter="20">
+      <i-col span="8">
+        <Card shadow>
+          <chart-pie style="height: 300px;" :value="pieData" text="用户访问来源"></chart-pie>
         </Card>
-      </Col>
-      <!--数据来源统计-->
-      <Col :md="24" :lg="8" :style="{marginBottom: '10px'}">
-        <Card>
-          <p slot="title" class="card-title">
-            <Icon type="ios-pulse-strong"></Icon>
-            数据来源统计
-          </p>
-          <div class="data-source-row">
-            <data-source-pie></data-source-pie>
-          </div>
+      </i-col>
+      <i-col span="16">
+        <Card shadow>
+          <chart-bar style="height: 300px;" :value="barData" text="每周用户活跃量"/>
         </Card>
-      </Col>
+      </i-col>
     </Row>
   </div>
 </template>
 
 <script>
-  import dataSourcePie from './components/dataSourcePie.vue'
-  import visiteVolume from './components/visiteVolume.vue'
-  import inforCard from './components/inforCard.vue'
+  /* import dataSourcePie from './components/dataSourcePie.vue'
+   import visiteVolume from './components/visiteVolume.vue'
+   import inforCard from './components/inforCard.vue'
+   dataSourcePie,
+         visiteVolume,
+         inforCard */
   import { mapGetters } from 'vuex'
+  import InforCard from '@/components/info-card'
+  import CountTo from '@/components/count-to'
+  import { ChartPie, ChartBar } from '@/components/charts'
 
   export default {
     name: 'home',
     components: {
-      dataSourcePie,
-      visiteVolume,
-      inforCard
+      InforCard,
+      CountTo,
+      ChartPie,
+      ChartBar
     },
     data () {
       return {
+        inforCardData: [
+          {title: '新增用户', icon: 'android-person-add', count: 803, color: '#2d8cf0'},
+          {title: '累计点击', icon: 'pinpoint', count: 23432, color: '#19be6b'},
+          {title: '新增问答', icon: 'help-circled', count: 142, color: '#ff9900'},
+          {title: '分享统计', icon: 'android-share-alt', count: 657, color: '#ed3f14'},
+          {title: '新增活动', icon: 'social-twitch', count: 12, color: '#E46CBB'},
+          {title: '新增页面', icon: 'paper-airplane', count: 14, color: '#9A66E4'}
+        ],
+        pieData: [
+          {value: 335, name: '直接访问'},
+          {value: 310, name: '邮件营销'},
+          {value: 234, name: '联盟广告'},
+          {value: 135, name: '视频广告'},
+          {value: 1548, name: '搜索引擎'}
+        ],
+        barData: {
+          Mon: 13253,
+          Tue: 34235,
+          Wed: 26321,
+          Thu: 12340,
+          Fri: 24643,
+          Sat: 1322,
+          Sun: 1324
+        },
         count: {
           createUser: 496,
           visit: 3264,

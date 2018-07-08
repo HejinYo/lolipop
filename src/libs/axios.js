@@ -77,7 +77,7 @@ class httpRequest {
           })
           setTimeout(() => {
             window.location.href = '/#/login'
-          }, 1000)
+          }, 2000)
           // 返回reject阻拦本次请求，会报错，但是没办法userName.trim()
           return Promise.reject(data.msg)
         } else {

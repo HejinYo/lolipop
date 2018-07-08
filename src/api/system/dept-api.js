@@ -28,9 +28,9 @@ class DeptApi {
   }
 
   // 获取一个部门详情
-  static reqDeptInfo (resId) {
+  static reqDeptInfo (deptId) {
     return axios.request({
-      url: '/sys/dept/' + resId,
+      url: '/sys/dept/' + deptId,
       method: 'get'
     })
   }
@@ -45,26 +45,26 @@ class DeptApi {
   }
 
   // 修改部门
-  static reqDeptUpdate (data, resId) {
+  static reqDeptUpdate (data, deptId) {
     return axios.request({
-      url: '/sys/dept/' + resId,
+      url: '/sys/dept/' + deptId,
       method: 'put',
       data: data
     })
   }
 
   // 删除部门
-  static reqDeptDelete (resId) {
+  static reqDeptDelete (deptId) {
     return axios.request({
-      url: '/sys/dept/' + resId,
+      url: '/sys/dept/' + deptId,
       method: 'delete'
     })
   }
 
   // 部门树节点拖动
-  static reqDeptDrop (type, resId, inResId) {
+  static reqDeptDrop (type, deptId, inResId) {
     return axios.request({
-      url: '/sys/dept/drop/' + type + '/' + resId + '/' + inResId,
+      url: '/sys/dept/drop/' + type + '/' + deptId + '/' + inResId,
       method: 'put'
     })
   }

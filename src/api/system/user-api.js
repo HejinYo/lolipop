@@ -12,9 +12,9 @@ class UserApi {
   }
 
   // 获取一个用户详情
-  static reqUserInfo (resId) {
+  static reqUserInfo (userId) {
     return axios.request({
-      url: '/sys/user/' + resId,
+      url: '/sys/user/' + userId,
       method: 'get'
     })
   }
@@ -29,18 +29,18 @@ class UserApi {
   }
 
   // 修改用户
-  static reqUserUpdate (data, resId) {
+  static reqUserUpdate (data, userId) {
     return axios.request({
-      url: '/sys/user/' + resId,
+      url: '/sys/user/' + userId,
       method: 'put',
       data: data
     })
   }
 
   // 删除用户
-  static reqUserDelete (resId) {
+  static reqUserDelete (userId) {
     return axios.request({
-      url: '/sys/user/' + resId,
+      url: '/sys/user/' + userId,
       method: 'delete'
     })
   }

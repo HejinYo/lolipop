@@ -20,9 +20,9 @@ class RoleApi {
   }
 
   // 获取一个角色详情
-  static reqRoleInfo (resId) {
+  static reqRoleInfo (roleId) {
     return axios.request({
-      url: '/sys/role/' + resId,
+      url: '/sys/role/' + roleId,
       method: 'get'
     })
   }
@@ -37,18 +37,18 @@ class RoleApi {
   }
 
   // 修改角色
-  static reqRoleUpdate (data, resId) {
+  static reqRoleUpdate (data, roleId) {
     return axios.request({
-      url: '/sys/role/' + resId,
+      url: '/sys/role/' + roleId,
       method: 'put',
       data: data
     })
   }
 
   // 删除角色
-  static reqRoleDelete (resId) {
+  static reqRoleDelete (roleId) {
     return axios.request({
-      url: '/sys/role/' + resId,
+      url: '/sys/role/' + roleId,
       method: 'delete'
     })
   }
