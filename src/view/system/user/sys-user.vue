@@ -107,7 +107,7 @@
     </Row>
 
     <!-- 用户表单 -->
-    <Modal :mask-closable="false" v-model="formVisible" :title="fromTitle">
+    <Modal :mask-closable="false" v-model="formVisible" :title="formTitle">
       <Form ref="formModel" :model="formModel" :rules="formValidate" :label-width="90">
         <FormItem label="用户名称：" prop="userName">
           <Input v-model="formModel.userName" placeholder="请输入"></Input>
@@ -191,7 +191,7 @@
         return this.currCol == null
       },
       // 表单标题
-      fromTitle () {
+      formTitle () {
         switch (this.operteType) {
           case 10:
             return '添加用户'

@@ -140,7 +140,7 @@
     </Row>
 
     <!-- 资源表单 -->
-    <Modal :mask-closable="false" v-model="formVisible" :title="fromTitle">
+    <Modal :mask-closable="false" v-model="formVisible" :title="formTitle">
       <Form ref="formModel" :model="formModel" :rules="formValidate" :label-width="90">
         <FormItem label="上级资源：" prop="parentName">
           <i-Input v-model="formModel.parentName" readonly></i-Input>
@@ -175,7 +175,7 @@
     </Modal>
 
     <!-- 权限表单 -->
-    <Modal :mask-closable="false" v-model="permVisible" :title="fromTitle">
+    <Modal :mask-closable="false" v-model="permVisible" :title="formTitle">
       <Form ref="sysPermission" :model="sysPermission" :rules="permValidate" :label-width="80">
         <FormItem label="所属资源" prop="resId">
           <i-Input v-model="sysPermission.resName" readonly></i-Input>
@@ -234,7 +234,7 @@
         }
       },
       // 表单标题
-      fromTitle () {
+      formTitle () {
         switch (this.operteType) {
           case 10:
             return '添加资源'

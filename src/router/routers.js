@@ -117,16 +117,6 @@ export default [
         component: () => import('@/view/system/dict')
       },
       {
-        path: 'log',
-        name: 'log',
-        meta: {
-          icon: 'map',
-          title: '日志管理',
-          requireAuth: true
-        },
-        component: () => import('@/view/multilevel/level-1.vue')
-      },
-      {
         path: 'config',
         name: 'config',
         meta: {
@@ -134,14 +124,14 @@ export default [
           title: '参数配置',
           requireAuth: true
         },
-        component: () => import('@/view/multilevel/level-1.vue')
+        component: () => import('@/view/system/config')
       },
       {
-        path: 'access',
-        name: 'access',
+        path: 'log',
+        name: 'log',
         meta: {
-          icon: 'locked',
-          title: '权限管理',
+          icon: 'map',
+          title: '日志管理',
           requireAuth: true
         },
         component: () => import('@/view/multilevel/level-1.vue')

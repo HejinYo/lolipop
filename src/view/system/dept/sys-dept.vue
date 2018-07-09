@@ -96,7 +96,7 @@
     </Row>
 
     <!-- 部门表单 -->
-    <Modal :mask-closable="false" v-model="formVisible" :title="fromTitle">
+    <Modal :mask-closable="false" v-model="formVisible" :title="formTitle">
       <Form ref="formModel" :model="formModel" :rules="formValidate" :label-width="90">
         <FormItem label="上级部门：" prop="parentName">
           <i-Input v-model="formModel.parentName" readonly></i-Input>
@@ -150,7 +150,7 @@
         return this.currCol == null
       },
       // 表单标题
-      fromTitle () {
+      formTitle () {
         switch (this.operteType) {
           case 10:
             return '添加部门'
