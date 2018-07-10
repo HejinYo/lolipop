@@ -177,6 +177,7 @@
       },
       // 根节点点击事件
       handleRoot () {
+        this.$refs.operateTree.setCurrentKey(null)
         this.$emit('root-load', this.rootNode())
       },
       // 添加节点

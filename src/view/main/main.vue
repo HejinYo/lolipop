@@ -42,8 +42,8 @@
   import MessageTip from './components/message-tip'
   import { mapMutations, mapActions } from 'vuex'
   import { getNewTagList, getNextName } from '@/libs/util'
-  import minLogo from '@/assets/images/logo-min.jpg'
-  import maxLogo from '@/assets/images/logo.jpg'
+  import minLogo from '@/assets/images/logo-min.png'
+  import maxLogo from '@/assets/images/logo.png'
   import './main.less'
 
   export default {

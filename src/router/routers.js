@@ -134,7 +134,7 @@ export default [
           title: '日志管理',
           requireAuth: true
         },
-        component: () => import('@/view/multilevel/level-1.vue')
+        component: () => import('@/view/system/log')
       },
       {
         path: 'vuexTest',

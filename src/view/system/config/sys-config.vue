@@ -13,7 +13,6 @@
                 <Button type="primary" icon="android-add" @click="addData" v-if="PermCheck.dictSave()">添加</Button>
                 <Button type="primary" icon="edit" :disabled="btnDisabled" @click="editData" v-if="PermCheck.configUpdate()">修改</Button>
                 <Button type="error" icon="android-delete" :disabled="btnDisabled" @click="deleteData" v-if="PermCheck.configDelete()">删除</Button>
-                <Button type="info" icon="home" :disabled="btnDisabled" @click="changeOption" v-if="PermCheck.configUpdate()">属性</Button>
               </i-Col>
               <!-- 简单查询 -->
               <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -38,7 +37,7 @@
                         @row-click="rowClick" @row-dblclick="rowDbClick" @sort-change="sortChange">
                 <el-table-column prop="configId" label="配置ID" sortable="custom" align="center" width="90"></el-table-column>
                 <el-table-column prop="name" label="配置名称" sortable="custom" min-width="120"></el-table-column>
-                <el-table-column prop="code" label="配置编码" sortable="custom" min-width="160"></el-table-column>
+                <el-table-column prop="code" label="配置编码" sortable="custom" min-width="160" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="label" label="配置选项" sortable="custom" align="center" min-width="150">
                   <template slot-scope="scope">
                     <Select transfer v-model="scope.row.optionId" size="small" @on-change="selectChange" label-in-value>
@@ -59,7 +58,12 @@
                     </Tag>
                   </template>
                 </el-table-column>
-                <el-table-column prop="createTime" label="创建日期" sortable="custom" align="center" width="180"></el-table-column>
+                <el-table-column prop="createTime" label="创建日期" sortable="custom" align="center" width="160"></el-table-column>
+                <el-table-column label="操作" v-if="PermCheck.configUpdate()" align="center" width="60">
+                  <template slot-scope="scope">
+                    <Button size="small" type="info" @click="changeOption(scope.row)">选项</Button>
+                  </template>
+                </el-table-column>
               </el-table>
               <br/>
               <Page show-elevator show-total show-sizer size="small" placement="top"
@@ -75,8 +79,6 @@
         </div>
       </Card>
     </Row>
-
-
     <!-- 配置表单 -->
     <Modal :mask-closable="false" v-model="formVisible" :title="formTitle">
       <Form ref="formModel" :model="formModel" :rules="formValidate" :label-width="100" label-position="right">
@@ -127,7 +129,7 @@
               <i-Input v-model="scope.row.description"></i-Input>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="120">
+          <el-table-column label="操作" align="center"  width="120">
             <template slot-scope="scope">
               <Button size="small" type="info" @click="operOption(scope.$index, scope.row)">
                 {{ scope.row.optionId?'更新':'保存'}}
@@ -272,8 +274,8 @@
           if (code === 0) {
             this.currCol = null
             this.listData = result.list
-            this.pageParam.total = result.totalCount
-            this.pageParam.pageNum = result.currPage
+            this.pageParam.total = result.total
+            this.pageParam.pageNum = result.pageNum
           } else {
             this.$Message.warning(msg)
           }
@@ -352,11 +354,9 @@
         this.formVisible = false
       },
       // 表格右击
-      changeOption () {
-        if (this.currCol.configId) {
-          this.loadOptionList(this.currCol.code)
-          this.optionVisible = true
-        }
+      changeOption (data) {
+        this.loadOptionList(data.code)
+        this.optionVisible = true
       },
       // 添加
       addData () {
