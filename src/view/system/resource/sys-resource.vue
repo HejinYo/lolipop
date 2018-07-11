@@ -210,7 +210,6 @@
   import DictSelect from '@/components/dict-select'
   import ResourceApi from '@/api/system/resource-api'
   import PermissionApi from '@/api/system/permission-api'
-  import PermCheck from '@/libs/perm-check/perm-check.js'
 
   export default {
     name: 'sys-resource',
