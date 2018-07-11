@@ -45,8 +45,8 @@ export default {
   data () {
     return {
       form: {
-        userName: 'admin',
-        userpwd: 'hss321'
+        userName: '',
+        userpwd: ''
       }
     }
   },
