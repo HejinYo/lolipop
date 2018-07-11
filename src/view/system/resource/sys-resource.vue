@@ -22,9 +22,9 @@
               @node-add="addData"
               @node-edit="treeEdit"
               @node-del="deleteData"
-              :nodeAdd="tableType === 0 ? PermCheck.resSave() : PermCheck.permSave()"
-              :nodeEdit="tableType === 0 ? PermCheck.resUpdate() : PermCheck.permUpdate()"
-              :nodeDel="tableType === 0 ? PermCheck.resDelete() : PermCheck.permDelete()"
+              :nodeAdd="showAdd"
+              :nodeEdit="showEdit"
+              :nodeDel="showDel"
             >
             </operate-tree>
           </div>
@@ -45,8 +45,8 @@
               <!--操作工具条-->
               <Row>
                 <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                  <Button type="primary" icon="edit" :disabled="btnDisabled" v-if="tableType === 0 ? PermCheck.resUpdate() : PermCheck.permUpdate()" @click="editData">修改</Button>
-                  <Button type="error" icon="android-delete" :disabled="btnDisabled" v-if="tableType === 0 ? PermCheck.resDelete() : PermCheck.permDelete()" @click="deleteData">删除</Button>
+                  <Button type="primary" icon="edit" :disabled="btnDisabled" v-if="showEdit" @click="editData">修改</Button>
+                  <Button type="error" icon="android-delete" :disabled="btnDisabled" v-if="showDel" @click="deleteData">删除</Button>
                 </i-Col>
 
                 <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -210,6 +210,7 @@
   import DictSelect from '@/components/dict-select'
   import ResourceApi from '@/api/system/resource-api'
   import PermissionApi from '@/api/system/permission-api'
+  import PermCheck from '@/libs/perm-check'
 
   export default {
     name: 'sys-resource',
@@ -252,6 +253,18 @@
       // 操作按钮disabled
       btnDisabled () {
         return this.currCol == null
+      },
+      // 显示添加按钮
+      showAdd () {
+        return this.tableType === 0 ? PermCheck.resSave() : PermCheck.permSave()
+      },
+      // 显示编辑按钮
+      showEdit () {
+        return this.tableType === 0 ? PermCheck.resUpdate() : PermCheck.permUpdate()
+      },
+      // 显示删除按钮
+      showDel () {
+        return this.tableType === 0 ? PermCheck.resDelete() : PermCheck.permDelete()
       }
     },
     data () {
