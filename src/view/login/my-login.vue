@@ -19,8 +19,8 @@
                 </span>
                 </i-Input>
               </FormItem>
-              <FormItem prop="userpwd">
-                <i-Input type="password" v-model="form.userpwd" size="large" clearable placeholder="请输入密码">
+              <FormItem prop="userPwd">
+                <i-Input type="password" v-model="form.userPwd" size="large" clearable placeholder="请输入密码">
                 <span slot="prepend">
                     <Icon :size="14" type="locked"></Icon>
                 </span>
@@ -115,7 +115,7 @@
         errorCode: '',
         form: {
           userName: '',
-          userpwd: '',
+          userPwd: '',
           mobile: '',
           verifyCode: ''
         },
@@ -123,7 +123,7 @@
           userName: [
             {required: true, message: '账号不能为空', trigger: 'blur'}
           ],
-          userpwd: [
+          userPwd: [
             {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
           mobile: [
@@ -166,7 +166,8 @@
         if (this.tabName === 'account') {
           this.$refs.accountForm.validate(valid => {
             if (valid) {
-              this.handleLogin({userName: this.form.userName, userPwd: this.form.userpwd}).then(data => {
+              this.loading = true
+              this.handleLogin({userName: this.form.userName, userPwd: this.form.userPwd}).then(data => {
                 let {code, msg, result} = data
                 if (code === 0) {
                   this.message = null
@@ -175,6 +176,7 @@
                   this.$router.push({name: 'home'})
                 } else {
                   this.message = msg
+                  this.loading = false
                 }
               })
             }
