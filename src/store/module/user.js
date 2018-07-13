@@ -50,10 +50,10 @@ export default {
   },
   actions: {
     // 登录
-    handleLogin ({commit}, {userName, userpwd}) {
+    handleLogin ({commit}, {userName, userPwd}) {
       userName = userName.trim()
       return new Promise((resolve, reject) => {
-        LoginApi.login({userName, userpwd}).then(res => {
+        LoginApi.login({userName, userPwd}).then(res => {
           resolve(res)
         }).catch(err => {
           reject(err)

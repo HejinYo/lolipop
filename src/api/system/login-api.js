@@ -2,10 +2,10 @@ import axios from '@/libs/api.request'
 
 class LoginApi {
   // 用户登录
-  static login ({userName, userpwd}) {
+  static login ({userName, userPwd}) {
     return axios.request({
       url: 'login',
-      data: {userName, userpwd},
+      data: {userName, userPwd},
       method: 'post'
     })
   }
