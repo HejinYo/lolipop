@@ -1,6 +1,6 @@
-# vanilla
+# lolipop
 
-> vanilla admin project
+> lolipop admin project
 
 ## Build Setup
 

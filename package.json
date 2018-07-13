@@ -1,7 +1,7 @@
 {
-  "name": "vanilla",
+  "name": "lolipop",
   "version": "2.0.0",
-  "description": "vanilla admin project",
+  "description": "lolipop admin project",
   "author": "HejinYo <hejinyo@gmail.com>",
   "private": true,
   "scripts": {
