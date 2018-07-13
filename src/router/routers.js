@@ -9,7 +9,7 @@ export default [
       title: 'Login - 登录',
       hideInMenu: true
     },
-    component: () => import('@/view/login/login.vue')
+    component: () => import('@/view/login/my-login.vue')
   },
   {
     path: '/',
