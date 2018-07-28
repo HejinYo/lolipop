@@ -28,18 +28,18 @@
               </FormItem>
             </Form>
           </TabPane>
-          <TabPane label="手机号登录" name="mobile" icon="iphone">
-            <Form ref="mobileForm" :model="form" :rules="rules" class="form">
-              <FormItem prop="mobile">
-                <i-Input v-model="form.mobile" size="large" clearable placeholder="请输入手机号">
+          <TabPane label="手机号登录" name="phone" icon="iphone">
+            <Form ref="phoneForm" :model="form" :rules="rules" class="form">
+              <FormItem prop="phone">
+                <i-Input v-model="form.phone" size="large" clearable placeholder="请输入手机号">
                 <span slot="prepend">
                        <Icon :size="18" type="iphone"></Icon>
                  </span>
                 </i-Input>
               </FormItem>
-              <FormItem prop="verifyCode" :error="errorCode">
+              <FormItem prop="code" :error="errorCode">
                 <Row type="flex" justify="space-between" class="code-row-bg">
-                  <i-Input v-model="form.verifyCode" size="large" clearable placeholder="请输入短信验证码" :maxlength="maxLength" class="input-verify">
+                  <i-Input v-model="form.code" size="large" clearable placeholder="请输入短信验证码" :maxlength="maxLength" class="input-verify">
                   <span slot="prepend">
                      <Icon :size="14" type="ios-email-outline"></Icon>
                    </span>
@@ -89,8 +89,9 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  import { validatePhone } from '@/libs/validate'
+  import {mapActions} from 'vuex'
+  import {validatePhone} from '@/libs/validate'
+  import LoginApi from '@/api/system/login-api'
 
   export default {
     data () {
@@ -110,14 +111,14 @@
         // 倒计时显示时间
         countButton: '60 s',
         // 短信验证码长度
-        maxLength: 4,
+        maxLength: 6,
         // 验证码失败信息
         errorCode: '',
         form: {
           userName: '',
           userPwd: '',
-          mobile: '',
-          verifyCode: ''
+          phone: '',
+          code: ''
         },
         rules: {
           userName: [
@@ -126,7 +127,7 @@
           userPwd: [
             {required: true, message: '密码不能为空', trigger: 'blur'}
           ],
-          mobile: [
+          phone: [
             {required: true, message: '手机号不能为空', trigger: 'blur'},
             {validator: validatePhone, trigger: 'blur'}
           ]
@@ -139,10 +140,18 @@
       ]),
       // 发送验证码
       sendVerify () {
-        this.$refs.mobileForm.validate(valid => {
+        this.$refs.phoneForm.validate(valid => {
           if (valid) {
-            this.sended = true
-            this.countDown()
+            // 发送验证请求
+            LoginApi.reqSendLoginCode(this.form.phone).then(data => {
+              let {code, msg} = data
+              if (code === 0) {
+                this.sended = true
+                this.countDown()
+              } else {
+                this.message = msg
+              }
+            })
           }
         })
       },
@@ -181,16 +190,28 @@
               })
             }
           })
-        } else if (this.tabName === 'mobile') {
-          this.$refs.mobileForm.validate(valid => {
+        } else if (this.tabName === 'phone') {
+          this.$refs.phoneForm.validate(valid => {
             if (valid) {
-              if (this.form.verifyCode === '') {
+              if (this.form.code === '') {
                 this.errorCode = '验证码不能为空'
                 return
               } else {
                 this.errorCode = ''
               }
-              this.$Message.error('页面演示，暂不支持短信登录')
+              LoginApi.phoneLogin({phone: this.form.phone, code: this.form.code}).then(data => {
+                let {code, msg, result} = data
+                if (code === 0) {
+                  this.message = null
+                  // 设置Token
+                  this.$store.commit('setToken', result)
+                  this.$router.push({name: 'home'})
+                } else {
+                  this.message = msg
+                  this.loading = false
+                }
+              })
+              // this.$Message.error('页面演示，暂不支持短信登录')
             }
           })
         }

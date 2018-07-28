@@ -1,6 +1,24 @@
 import axios from '@/libs/api.request'
 
 class LoginApi {
+
+  // 发送登录验证码
+  static reqSendLoginCode (phone) {
+    return axios.request({
+      url: 'login/code/' + phone,
+      method: 'post'
+    })
+  }
+
+  // 手机登录
+  static phoneLogin ({phone, code}) {
+    return axios.request({
+      url: 'login/phone',
+      data: {phone, code},
+      method: 'post'
+    })
+  }
+
   // 用户登录
   static login ({userName, userPwd}) {
     return axios.request({
