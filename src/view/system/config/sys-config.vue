@@ -45,7 +45,16 @@
                     </Select>
                   </template>
                 </el-table-column>
-                <el-table-column prop="value" label="配置值" sortable="custom" align="center" min-width="200" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="value" label="配置值" sortable="custom" align="center" min-width="200" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <json-view v-if="scope.row.type === 4" :value="scope.row.value" placement="left-end">
+                      <span slot="button">
+                        {{scope.row.value}}
+                      </span>
+                    </json-view>
+                    <span v-else>{{scope.row.value}}</span>
+                  </template>
+                </el-table-column>
                 <el-table-column prop="type" label="数据类型" sortable="custom" align="center" width="100">
                   <template slot-scope="scope">
                     <dict-show code="DATA_TYPE" :dictValue="scope.row.type"></dict-show>
