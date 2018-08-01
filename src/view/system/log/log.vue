@@ -13,8 +13,16 @@
           <el-table-column prop="id" label="配置ID" sortable="custom" align="center" width="90"></el-table-column>
           <el-table-column prop="operation" label="操作" sortable="custom" align="center" width="120"></el-table-column>
           <el-table-column prop="method" label="执行方法" sortable="custom" min-width="90" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="params" label="参数" sortable="custom" min-width="90" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="userName" label="姓名" sortable="custom" align="center" width="90"></el-table-column>
+          <el-table-column prop="params" label="参数" sortable="custom" min-width="90" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <json-view :value="scope.row.params" placement="left-end">
+                <span slot="button">
+                  {{scope.row.params}}
+                </span>
+              </json-view>
+            </template>
+          </el-table-column>
+          <el-table-column prop="userName" label="姓名" sortable="custom" align="center" width="120"></el-table-column>
           <el-table-column prop="createTime" label="创建日期" sortable="custom" align="center" width="160"></el-table-column>
         </el-table>
       </template>
@@ -24,12 +32,14 @@
 </template>
 <script>
   import OperateTable from '@/components/operate-teble'
+  import JsonView from '@/components/json-view'
   import LogApi from '@/api/system/log-api'
 
   export default {
     name: 'sys-log',
     components: {
-      OperateTable
+      OperateTable,
+      JsonView
     },
     data () {
       return {

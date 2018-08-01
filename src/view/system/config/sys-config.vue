@@ -116,7 +116,11 @@
           <el-table-column prop="optionId" label="ID" align="center" width="50"></el-table-column>
           <el-table-column prop="value" label="配置值" align="center" min-width="150">
             <template slot-scope="scope">
-              <i-Input v-model="scope.row.value" type="textarea" :rows="1"></i-Input>
+              <json-view :value="scope.row.value" placement="right">
+                <span slot="button">
+                  <i-Input v-model="scope.row.value" type="textarea" :rows="1"></i-Input>
+                </span>
+              </json-view>
             </template>
           </el-table-column>
           <el-table-column prop="label" label="显示值" align="center" min-width="150">
@@ -154,13 +158,15 @@
   import { mapGetters } from 'vuex'
   import DictShow from '@/components/dict-show'
   import DictSelect from '@/components/dict-select'
+  import JsonView from '@/components/json-view'
   import ConfigApi from '@/api/system/config-api'
 
   export default {
     name: 'config',
     components: {
       DictShow,
-      DictSelect
+      DictSelect,
+      JsonView
     },
     computed: {
       ...mapGetters([
