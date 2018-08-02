@@ -1,7 +1,6 @@
 <template>
   <Row>
     <i-col span="16">
-      <icons :size="30" type="QQ"/>
       <Row v-for="i in (customIconList.length / 3)" :key="`custom-icon-row-${i}`">
         <i-col span="8" v-for="item in customIconList.slice((i - 1) * 3, i * 3)" :key="`custom-icon-${item}`">
           <Card style="margin: 0 5px 5px; text-align: center;">
