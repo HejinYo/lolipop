@@ -19,8 +19,8 @@ module.exports = {
         }
       },
       '/api': {
-        //target: 'http://47.94.208.248:90/',
-        target: 'http://127.0.0.1:80/',
+        //target: 'https://m.hejinyo.cn/api/',
+        target: 'http://127.0.0.1:88/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -30,7 +30,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 8089, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -77,7 +77,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: '#source-map',
 
