@@ -40,9 +40,9 @@
               <!--操作工具条-->
               <Row>
                 <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                  <Button type="primary" icon="plus" :disabled="addBtnDisabled" v-if="PermCheck.dictOptionSave()" @click="addOptionData">添加</Button>
-                  <Button type="primary" icon="edit" :disabled="btnDisabled" v-if="PermCheck.dictOptionUpdate()" @click="editOptionData">修改</Button>
-                  <Button type="error" icon="android-delete" :disabled="btnDisabled" v-if="PermCheck.dictOptionDelete()" @click="deleteData">删除</Button>
+                  <Button type="primary" icon="md-add-circle" :disabled="addBtnDisabled" v-if="PermCheck.dictOptionSave()" @click="addOptionData">添加</Button>
+                  <Button type="primary" icon="md-create" :disabled="btnDisabled" v-if="PermCheck.dictOptionUpdate()" @click="editOptionData">修改</Button>
+                  <Button type="error" icon="md-trash" :disabled="btnDisabled" v-if="PermCheck.dictOptionDelete()" @click="deleteData">删除</Button>
                 </i-Col>
 
                 <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -53,10 +53,10 @@
                       <Option value="description">说明</Option>
                     </Select>
                     <Button slot="append" @click="search">
-                      <Icon type="ios-search-strong"></Icon>
+                      <Icon type="ios-search"></Icon>
                     </Button>
                     <Button slot="append" @click="searchRset">
-                      <Icon type="ios-loop-strong"></Icon>
+                      <Icon type="md-refresh"></Icon>
                     </Button>
                   </i-Input>
                 </i-Col>

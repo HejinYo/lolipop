@@ -36,7 +36,7 @@
           <p slot="title">
             {{tableShow}}
             <a href="#" @click.prevent="chageTable">
-              <Icon type="ios-loop-strong"></Icon>
+              <Icon type="ios-switch"></Icon>
               切换
             </a>
           </p>
@@ -45,8 +45,8 @@
               <!--操作工具条-->
               <Row>
                 <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                  <Button type="primary" icon="edit" :disabled="btnDisabled" v-if="showEdit" @click="editData">修改</Button>
-                  <Button type="error" icon="android-delete" :disabled="btnDisabled" v-if="showDel" @click="deleteData">删除</Button>
+                  <Button type="primary" icon="md-create" :disabled="btnDisabled" v-if="showEdit" @click="editData">修改</Button>
+                  <Button type="error" icon="md-trash" :disabled="btnDisabled" v-if="showDel" @click="deleteData">删除</Button>
                 </i-Col>
 
                 <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -62,10 +62,10 @@
                       </template>
                     </Select>
                     <Button slot="append" @click="search">
-                      <Icon type="ios-search-strong"></Icon>
+                      <Icon type="ios-search"></Icon>
                     </Button>
                     <Button slot="append" @click="searchRset">
-                      <Icon type="ios-loop-strong"></Icon>
+                      <Icon type="md-refresh"></Icon>
                     </Button>
                   </i-Input>
                 </i-Col>
@@ -81,7 +81,7 @@
                     <el-table-column prop="resName" label="资源名称" sortable="custom" align="center" min-width="150"></el-table-column>
                     <el-table-column prop="resCode" label="资源编码" sortable="custom" align="center" min-width="150"></el-table-column>
                     <!--<el-table-column prop="resPname" label="上级资源" sortable="custom" align="center" min-width="150"></el-table-column>-->
-                    <el-table-column prop="icon" label="图标" show-overflow-tooltip align="center" width="70">
+                    <el-table-column prop="icon" label="图标" align="center" width="70">
                       <template slot-scope="scope">
                         <Icon :type="scope.row.icon" :size="16"></Icon>
                       </template>
@@ -94,7 +94,7 @@
                     </el-table-column>
                     <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
                       <template slot-scope="scope">
-                        <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
+                        <Tag :color="scope.row.state === 0 ? 'success': 'warning' ">
                           {{scope.row.state === 0 ? '正常' : '禁用'}}
                         </Tag>
                       </template>
@@ -113,7 +113,7 @@
                     <el-table-column prop="permCode" label="权限编码" sortable="custom" align="center" min-width="150"></el-table-column>
                     <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
                       <template slot-scope="scope">
-                        <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
+                        <Tag :color="scope.row.state === 0 ? 'success': 'warning' ">
                           {{scope.row.state === 0 ? '正常' : '禁用'}}
                         </Tag>
                       </template>

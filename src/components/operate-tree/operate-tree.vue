@@ -3,13 +3,13 @@
     <i-Input v-model="filterText" placeholder="过滤节点" clearable class="filter-input">
       <span slot="prepend">
         <span class="filter-btn">
-          <Button size="small" @click="handleRoot">
-            <Icon type="home"></Icon>
+          <Button size="small" ghost @click="handleRoot">
+            <Icon type="md-home"></Icon>
           </Button>
         </span>
         <span v-if="rootAddShow" class="filter-btn">
-          <Button v-if="rootAddShow" size="small" @click="rootAdd">
-            <Icon type="plus"></Icon>
+          <Button v-if="rootAddShow" ghost size="small" @click="rootAdd">
+            <Icon type="md-add-circle"></Icon>
           </Button>
         </span>
       </span>
@@ -39,9 +39,9 @@
           <slot :data="data" :node="node"></slot>
           <!-- 操作按钮 -->
           <span v-if="currData===data[value]">
-            <Icon type="plus" @click.stop="addNode(data,node)" v-if="nodeAdd" size="14" class="operate-btn"></Icon>
-            <Icon type="ios-compose-outline" @click.stop="editNode(data,node)" v-if="nodeEdit" size="16" class="operate-btn"></Icon>
-            <Icon type="android-delete" @click.stop="delNode(data,node)" v-if="nodeDel" size="16" class="operate-btn"></Icon>
+            <Icon type="md-add-circle" @click.stop="addNode(data,node)" v-if="nodeAdd" size="16" class="operate-btn"></Icon>
+            <Icon type="md-create" @click.stop="editNode(data,node)" v-if="nodeEdit" size="16" class="operate-btn"></Icon>
+            <Icon type="md-trash" @click.stop="delNode(data,node)" v-if="nodeDel" size="16" class="operate-btn"></Icon>
           </span>
         </span>
         <!--<span >
@@ -238,7 +238,7 @@
     }
 
     .operate-btn {
-      margin: 0 3px;
+      margin: 0 0 0 3px;
     }
 
   }

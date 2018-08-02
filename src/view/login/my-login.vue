@@ -15,14 +15,14 @@
               <FormItem prop="userName">
                 <i-Input v-model="form.userName" size="large" clearable placeholder="请输入用户名">
                 <span slot="prepend">
-                   <Icon :size="16" type="person"></Icon>
+                   <Icon :size="16" type="md-person"></Icon>
                 </span>
                 </i-Input>
               </FormItem>
               <FormItem prop="userPwd">
                 <i-Input type="password" v-model="form.userPwd" size="large" clearable placeholder="请输入密码">
                 <span slot="prepend">
-                    <Icon :size="14" type="locked"></Icon>
+                    <Icon :size="16" type="md-lock"></Icon>
                 </span>
                 </i-Input>
               </FormItem>
@@ -33,7 +33,7 @@
               <FormItem prop="phone">
                 <i-Input v-model="form.phone" size="large" clearable placeholder="请输入手机号">
                 <span slot="prepend">
-                       <Icon :size="18" type="iphone"></Icon>
+                       <Icon :size="16" type="ios-phone-portrait"></Icon>
                  </span>
                 </i-Input>
               </FormItem>
@@ -41,7 +41,7 @@
                 <Row type="flex" justify="space-between" class="code-row-bg">
                   <i-Input v-model="form.code" size="large" clearable placeholder="请输入短信验证码" :maxlength="maxLength" class="input-verify">
                   <span slot="prepend">
-                     <Icon :size="14" type="ios-email-outline"></Icon>
+                     <Icon :size="16" type="md-mail"></Icon>
                    </span>
                   </i-Input>
                   <Button size="large" @click="sendVerify" v-if="!sended" class="send-verify">获取验证码</Button>
@@ -65,9 +65,9 @@
         <Row type="flex" justify="space-between" class="code-row-bg other-login">
                     <span class="other-way">
                         其它方式登录
-                        <icon class="other-icon" name="brands/qq"></icon>
-                        <icon class="other-icon lower" scale="1.2" name="brands/weixin"></icon>
-                        <icon class="other-icon lower" scale="1.2" name="brands/weibo"></icon>
+                        <icons type="QQ"/>
+                        <icons type="wechat-fill"/>
+                        <icons type="weibo"/>
                     </span>
           <!--<router-link to="/regist"><a class="forget-pass">注册账户</a></router-link>-->
           <a class="forget-pass" href="http://hejinyo.cn" target="_blank">注册账户</a>

@@ -10,9 +10,9 @@
             <!--操作工具条-->
             <Row>
               <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                <Button type="primary" icon="plus" v-if="PermCheck.roleSave()" @click="addData">添加</Button>
-                <Button type="primary" icon="edit" :disabled="btnDisabled" v-if="PermCheck.roleUpdate()" @click="editData">修改</Button>
-                <Button type="error" icon="android-delete" :disabled="btnDisabled" v-if="PermCheck.roleDelete()" @click="deleteData">删除</Button>
+                <Button type="primary" icon="md-add-circle" v-if="PermCheck.roleSave()" @click="addData">添加</Button>
+                <Button type="primary" icon="md-create" :disabled="btnDisabled" v-if="PermCheck.roleUpdate()" @click="editData">修改</Button>
+                <Button type="error" icon="md-trash" :disabled="btnDisabled" v-if="PermCheck.roleDelete()" @click="deleteData">删除</Button>
               </i-Col>
 
               <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -22,10 +22,10 @@
                     <Option value="roleCode">角色编码</Option>
                   </Select>
                   <Button slot="append" @click="search">
-                    <Icon type="ios-search-strong"></Icon>
+                    <Icon type="ios-search"></Icon>
                   </Button>
                   <Button slot="append" @click="searchRset">
-                    <Icon type="ios-loop-strong"></Icon>
+                    <Icon type="md-refresh"></Icon>
                   </Button>
                 </i-Input>
               </i-Col>
@@ -43,7 +43,7 @@
                 <el-table-column prop="seq" sortable="custom" label="序号" align="center" width="70"></el-table-column>
                 <el-table-column prop="state" sortable="custom" label="状态" align="center" width="90">
                   <template slot-scope="scope">
-                    <Tag :color="scope.row.state === 0 ? 'green': 'red' ">
+                    <Tag :color="scope.row.state === 0 ? 'success': 'warning' ">
                       {{scope.row.state === 0 ? '正常' : '禁用'}}
                     </Tag>
                   </template>

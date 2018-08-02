@@ -1,7 +1,7 @@
 <template>
   <div @click="handleChange" v-if="showFullScreenBtn" class="full-screen-btn-con">
     <Tooltip :content="value ? '退出全屏' : '全屏'" placement="bottom">
-      <Icon :type="value ? 'arrow-shrink' : 'arrow-expand'" :size="22"></Icon>
+      <Icon :type="value ? 'md-contract': 'md-expand' " :size="22"></Icon>
     </Tooltip>
   </div>
 </template>
@@ -73,7 +73,7 @@
   }
 </script>
 
-<style lang="less" >
+<style lang="less">
   .full-screen-btn-con {
     margin: 0 3px;
     vertical-align: middle;

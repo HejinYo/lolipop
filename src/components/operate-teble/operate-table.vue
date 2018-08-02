@@ -10,9 +10,9 @@
             <Row>
               <!--操作工具条-->
               <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                <Button type="primary" icon="android-add" @click="addData" v-if="tableAdd">添加</Button>
-                <Button type="primary" icon="edit" :disabled="editVisible" @click="editData" v-if="tableEdit">修改</Button>
-                <Button type="error" icon="android-delete" :disabled="delVisible" @click="delData" v-if="tableDel">删除</Button>
+                <Button type="primary" icon="md-add-circle" @click="addData" v-if="tableAdd">添加</Button>
+                <Button type="primary" icon="md-create" :disabled="editVisible" @click="editData" v-if="tableEdit">修改</Button>
+                <Button type="error" icon="md-trash" :disabled="delVisible" @click="delData" v-if="tableDel">删除</Button>
                 <!-- 自定义按钮组 -->
                 <slot name="button"></slot>
               </i-Col>
@@ -23,10 +23,10 @@
                     <Option v-for="item in searchData" :value="item.value" :label="item.label" :key="item.value"></Option>
                   </Select>
                   <Button slot="append" @click="search">
-                    <Icon type="ios-search-strong"></Icon>
+                    <Icon type="ios-search"></Icon>
                   </Button>
                   <Button slot="append" @click="searchRset">
-                    <Icon type="ios-loop-strong"></Icon>
+                    <Icon type="md-refresh"></Icon>
                   </Button>
                 </i-Input>
               </i-Col>

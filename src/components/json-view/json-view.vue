@@ -1,10 +1,12 @@
 <template>
   <span>
     <Poptip transfer trigger="hover" :placement="placement">
-      <slot name="button"></slot>
+      <span style="white-space: nowrap;">
+        <slot name="button"></slot>
+      </span>
       <div slot="content">
         <div style="max-height: 300px">
-          <span v-html="processData()" ></span>
+          <span v-html="processData()"></span>
         </div>
       </div>
     </Poptip>
@@ -39,7 +41,7 @@
           let json = JSON.parse(this.value)
           return this.formatJson(json, 1)
         } catch (e) {
-          return ''
+          return this.value
         }
       },
       formatJson (jsonObj, tabIndex) {
@@ -104,9 +106,11 @@
       },
       getPanel (innerHtml, tabIndex, isArray, index) {
         if (isArray) {
-          return "<span class=\"\"><i class='panel-suo'>-</i>[</span><div class=\"tab_" + tabIndex + '">' + innerHtml + "</div><label class=\"tips\">Array <span class='tips_math'>" + index + '<span></label><span>]</span>'
+          // return "<span class=\"\"><i class='panel-suo'>-</i>[</span><div class=\"tab_" + tabIndex + '">' + innerHtml + "</div><label class=\"tips\">Array <span class='tips_math'>" + index + '<span></label><span>]</span>'
+          return '<span class="">[</span><div class="tab_' + tabIndex + '">' + innerHtml + "</div><label class=\"tips\">Array <span class='tips_math'>" + index + '<span></label><span>]</span>'
         } else {
-          return "<span class=\"\"><i class='panel-suo'>-</i>{</span><div class=\"tab_" + tabIndex + '">' + innerHtml + '</div><label class="tips">Object{...}</label><span>}</span>'
+          // return "<span class=\"\"><i class='panel-suo'>-</i>{</span><div class=\"tab_" + tabIndex + '">' + innerHtml + '</div><label class="tips">Object{...}</label><span>}</span>'
+          return '<span class="">{</span><div class="tab_' + tabIndex + '">' + innerHtml + '</div><label class="tips">Object{...}</label><span>}</span>'
         }
       }
     }

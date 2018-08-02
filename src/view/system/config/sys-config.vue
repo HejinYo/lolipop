@@ -10,9 +10,9 @@
             <Row>
               <!--操作工具条-->
               <i-Col :xs="24" :sm="12" :md="14" :lg="16">
-                <Button type="primary" icon="android-add" @click="addData" v-if="PermCheck.dictSave()">添加</Button>
-                <Button type="primary" icon="edit" :disabled="btnDisabled" @click="editData" v-if="PermCheck.configUpdate()">修改</Button>
-                <Button type="error" icon="android-delete" :disabled="btnDisabled" @click="deleteData" v-if="PermCheck.configDelete()">删除</Button>
+                <Button type="primary" icon="md-add-circle" @click="addData" v-if="PermCheck.dictSave()">添加</Button>
+                <Button type="primary" icon="md-create" :disabled="btnDisabled" @click="editData" v-if="PermCheck.configUpdate()">修改</Button>
+                <Button type="error" icon="md-trash" :disabled="btnDisabled" @click="deleteData" v-if="PermCheck.configDelete()">删除</Button>
               </i-Col>
               <!-- 简单查询 -->
               <i-Col :xs="24" :sm="12" :md="10" :lg="8">
@@ -22,10 +22,10 @@
                     <Option value="code">配置编码</Option>
                   </Select>
                   <Button slot="append" @click="search">
-                    <Icon type="ios-search-strong"></Icon>
+                    <Icon type="ios-search"></Icon>
                   </Button>
                   <Button slot="append" @click="searchRset">
-                    <Icon type="ios-loop-strong"></Icon>
+                    <Icon type="md-refresh"></Icon>
                   </Button>
                 </i-Input>
               </i-Col>
@@ -45,7 +45,7 @@
                     </Select>
                   </template>
                 </el-table-column>
-                <el-table-column prop="value" label="配置值" sortable="custom" align="center" min-width="200" show-overflow-tooltip>
+                <el-table-column prop="value" label="配置值" sortable="custom" align="center" min-width="200">
                   <template slot-scope="scope">
                     <json-view v-if="scope.row.type === 4" :value="scope.row.value" placement="left-end">
                       <span slot="button">
@@ -62,8 +62,8 @@
                 </el-table-column>
                 <el-table-column prop="status" label="状态" sortable="custom" align="center" width="90">
                   <template slot-scope="scope">
-                    <Tag :color="scope.row.status === 0 ? 'green': 'red' ">
-                      {{scope.row.status === 0 ? '正常' : '禁用'}}
+                    <Tag :color="scope.row.state === 0 ? 'success': 'warning' ">
+                      {{scope.row.state === 0 ? '正常' : '禁用'}}
                     </Tag>
                   </template>
                 </el-table-column>

@@ -2,7 +2,7 @@
     <div @click="showMessage" class="message-con">
         <Tooltip :content="value > 0 ? '有' + value + '条未读消息' : '无未读消息'" placement="bottom">
             <Badge :count="value" >
-                <Icon type="ios-bell" :size="22"></Icon>
+                <Icon type="md-notifications-outline" :size="22"></Icon>
             </Badge>
         </Tooltip>
     </div>

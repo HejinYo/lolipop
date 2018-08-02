@@ -10,7 +10,8 @@ import importDirective from '@/directive'
 import 'iview/dist/styles/iview.css'
 import './index.less'
 import '@/assets/icons/iconfont.css'
-import { Tree, Checkbox, Table, TableColumn, Loading } from 'element-ui'
+import {Tree, Checkbox, Table, TableColumn, Loading} from 'element-ui'
+import Icons from '@/components/icons'
 import PermCheck from '@/libs/perm-check'
 
 // require('@/mock')
@@ -34,6 +35,10 @@ Vue.use(Checkbox)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Loading.directive)
+/**
+ * 注册全局组件
+ */
+Vue.component('icons', Icons)
 
 /* eslint-disable no-new */
 new Vue({
@@ -44,11 +49,11 @@ new Vue({
   data: {
     onresizeFlag: true
   },
-  mounted () {
+  mounted() {
     this.$nextTick(function () {
       let _this = this
       // 保证完全挂载
-      window.onresize = function temp () {
+      window.onresize = function temp() {
         if (_this.onresizeFlag) {
           _this.onresizeFlag = false
           let height = document.documentElement.clientHeight

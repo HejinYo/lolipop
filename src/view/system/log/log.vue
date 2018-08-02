@@ -13,7 +13,7 @@
           <el-table-column prop="id" label="配置ID" sortable="custom" align="center" width="90"></el-table-column>
           <el-table-column prop="operation" label="操作" sortable="custom" align="center" width="120"></el-table-column>
           <el-table-column prop="method" label="执行方法" sortable="custom" min-width="90" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="params" label="参数" sortable="custom" min-width="90" show-overflow-tooltip>
+          <el-table-column prop="params" label="参数" sortable="custom" min-width="90">
             <template slot-scope="scope">
               <json-view :value="scope.row.params" placement="left-end">
                 <span slot="button">

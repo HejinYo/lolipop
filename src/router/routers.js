@@ -71,7 +71,7 @@ export default [
         path: 'resource',
         name: 'resource',
         meta: {
-          icon: 'briefcase',
+          icon: 'md-briefcase',
           title: '资源管理',
           access: ['sys:resource:view']
         },
@@ -81,7 +81,7 @@ export default [
         path: 'dept',
         name: 'dept',
         meta: {
-          icon: 'compass',
+          icon: 'md-compass',
           title: '部门管理',
           access: ['sys:dept:view']
         },
@@ -101,7 +101,7 @@ export default [
         path: 'user',
         name: 'user',
         meta: {
-          icon: 'person-stalker',
+          icon: 'md-person',
           title: '用户管理',
           access: ['sys:user:view']
         },
@@ -111,7 +111,7 @@ export default [
         path: 'dict',
         name: 'dict',
         meta: {
-          icon: 'cube',
+          icon: 'md-cube',
           title: '数据字典'
         },
         component: () => import('@/view/system/dict')
@@ -120,7 +120,7 @@ export default [
         path: 'config',
         name: 'config',
         meta: {
-          icon: 'aperture',
+          icon: 'md-aperture',
           title: '参数配置',
           requireAuth: true
         },
@@ -130,7 +130,7 @@ export default [
         path: 'log',
         name: 'log',
         meta: {
-          icon: 'map',
+          icon: 'md-map',
           title: '日志管理',
           requireAuth: true
         },
@@ -140,7 +140,7 @@ export default [
         path: 'vuexTest',
         name: 'vuexTest',
         meta: {
-          icon: 'person-stalker',
+          icon: 'md-person',
           title: '状态测试',
           requireAuth: true
         },
@@ -152,7 +152,7 @@ export default [
     path: '/components',
     name: 'components',
     meta: {
-      icon: 'social-buffer',
+      icon: 'logo-buffer',
       title: '组件'
     },
     component: Main,
@@ -161,7 +161,7 @@ export default [
         path: 'split_pane_page',
         name: 'split_pane_page',
         meta: {
-          icon: 'pause',
+          icon: 'md-pause',
           title: '分割窗口'
         },
         component: () => import('@/view/components/split-pane/split-pane.vue')
@@ -170,7 +170,7 @@ export default [
         path: 'markdown_page',
         name: 'markdown_page',
         meta: {
-          icon: 'social-markdown',
+          icon: 'logo-markdown',
           title: 'Markdown编辑器'
         },
         component: () => import('@/view/components/markdown/markdown.vue')
@@ -179,7 +179,7 @@ export default [
         path: 'editor_page',
         name: 'editor_page',
         meta: {
-          icon: 'compose',
+          icon: 'ios-create-outline',
           title: '富文本编辑器'
         },
         component: () => import('@/view/components/editor/editor.vue')
@@ -199,7 +199,7 @@ export default [
     path: '/multilevel',
     name: 'multilevel',
     meta: {
-      icon: 'arrow-graph-up-right',
+      icon: 'md-trending-up',
       title: '多级菜单'
     },
     component: Main,
@@ -208,7 +208,7 @@ export default [
         path: 'level_2_1',
         name: 'level_2_1',
         meta: {
-          icon: 'arrow-graph-up-right',
+          icon: 'md-trending-up',
           title: '二级-1'
         },
         component: () => import('@/view/multilevel/level-1.vue')
@@ -217,8 +217,7 @@ export default [
         path: 'level_2_2',
         name: 'level_2_2',
         meta: {
-          access: ['super_admin'],
-          icon: 'arrow-graph-up-right',
+          icon: 'md-trending-up',
           title: '二级-2'
         },
         component: parentView,
@@ -227,7 +226,7 @@ export default [
             path: 'level_2_2_1',
             name: 'level_2_2_1',
             meta: {
-              icon: 'arrow-graph-up-right',
+              icon: 'md-trending-up',
               title: '三级-1'
             },
             component: () => import('@/view/multilevel/level-2/level-2-1.vue')
@@ -236,10 +235,10 @@ export default [
             path: 'level_2_2_2',
             name: 'level_2_2_2',
             meta: {
-              icon: 'arrow-graph-up-right',
+              icon: 'md-trending-up',
               title: '三级-2'
             },
-            component: () => import('@/view/multilevel/level-2/level-2-1.vue')
+            component: () => import('@/view/multilevel/level-2/level-2-2.vue')
           }
         ]
       },
@@ -247,7 +246,7 @@ export default [
         path: 'level_2_3',
         name: 'level_2_3',
         meta: {
-          icon: 'arrow-graph-up-right',
+          icon: 'md-trending-up',
           title: '二级-3'
         },
         component: parentView,
@@ -256,8 +255,7 @@ export default [
             path: 'level_2_3_1',
             name: 'level_2_3_1',
             meta: {
-              access: ['super_admin'],
-              icon: 'arrow-graph-up-right',
+              icon: 'md-trending-up',
               title: '三级-1'
             },
             component: () => import('@/view/multilevel/level-2/level-3/level-3-1.vue')
@@ -266,8 +264,7 @@ export default [
             path: 'level_2_3_2',
             name: 'level_2_3_2',
             meta: {
-              access: ['super_admin', 'admin'],
-              icon: 'arrow-graph-up-right',
+              icon: 'md-trending-up',
               title: '三级-2'
             },
             component: () => import('@/view/multilevel/level-2/level-3/level-3-1.vue')
