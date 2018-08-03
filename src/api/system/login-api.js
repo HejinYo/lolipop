@@ -1,7 +1,6 @@
 import axios from '@/libs/api.request'
 
 class LoginApi {
-
   // 发送登录验证码
   static reqSendLoginCode (phone) {
     return axios.request({
@@ -64,6 +63,13 @@ class LoginApi {
     return axios.request({
       url: 'logout',
       method: 'put'
+    })
+  }
+
+  static oauthLogin () {
+    return axios.request({
+      url: 'oauth/login',
+      method: 'get'
     })
   }
 }

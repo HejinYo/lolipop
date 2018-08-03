@@ -65,7 +65,9 @@
         <Row type="flex" justify="space-between" class="code-row-bg other-login">
                     <span class="other-way">
                         其它方式登录
-                        <icons type="QQ"/>
+                        <a :href="openAuthUrl" target="_blank">
+                          <icons type="QQ"/>
+                        </a>
                         <icons type="wechat-fill"/>
                         <icons type="weibo"/>
                     </span>
@@ -131,8 +133,22 @@
             {required: true, message: '手机号不能为空', trigger: 'blur'},
             {validator: validatePhone, trigger: 'blur'}
           ]
-        }
+        },
+        openAuthUrl: null
       }
+    },
+    mounted () {
+      this.$nextTick(function () {
+        // 保证完全挂载
+        LoginApi.oauthLogin().then((data) => {
+          let {code, msg, result} = data
+          if (code === 0) {
+            this.openAuthUrl = result
+          } else {
+            this.$Message.error(msg)
+          }
+        })
+      })
     },
     methods: {
       ...mapActions([
