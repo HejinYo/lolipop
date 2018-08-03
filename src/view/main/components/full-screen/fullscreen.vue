@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleChange" v-if="showFullScreenBtn" class="full-screen-btn-con">
+  <div @click="handleChange" v-if="showFullScreenBtn" class="tip-common">
     <Tooltip :content="value ? '退出全屏' : '全屏'" placement="bottom">
       <Icon :type="value ? 'md-contract': 'md-expand' " :size="22"></Icon>
     </Tooltip>
@@ -74,13 +74,4 @@
 </script>
 
 <style lang="less">
-  .full-screen-btn-con {
-    margin: 0 3px;
-    vertical-align: middle;
-    line-height: 1;
-    display: inline-block;
-    width: 30px;
-    text-align: center;
-    cursor: pointer;
-  }
 </style>

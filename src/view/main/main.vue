@@ -15,6 +15,7 @@
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
           <message-tip v-model="messageCount"></message-tip>
           <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+          <right-sidebar/>
           <user :user-avator="userAvator" :user-name="userName"/>
         </header-bar>
       </Header>
@@ -40,6 +41,7 @@
   import User from './components/user'
   import FullScreen from './components/full-screen'
   import MessageTip from './components/message-tip'
+  import RightSidebar from './components/right-sidebar'
   import { mapMutations, mapActions } from 'vuex'
   import { getNewTagList, getNextName } from '@/libs/util'
   import minLogo from '@/assets/images/logo-min.png'
@@ -54,7 +56,8 @@
       TagsNav,
       User,
       FullScreen,
-      MessageTip
+      MessageTip,
+      RightSidebar
     },
     data () {
       return {
