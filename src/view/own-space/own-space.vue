@@ -348,7 +348,8 @@
           dragMode: 'none', // 图片就不能拖动
           aspectRatio: 1, // 剪切比例
           preview: '#preview1', // 截图的显示位置,
-          zoomable: false// 是否允许缩放图片
+          zoomable: false, // 是否允许缩放图片
+          checkCrossOrigin: false //跨域检查
         })
       },
       // 销毁图片剪切
