@@ -26,14 +26,14 @@
         <transition-group name="taglist-moving-animation">
           <Tag
             type="dot"
-            v-for="item in list"
+            v-for="(item, index) in list"
             ref="tagsPageOpened"
-            :key="`tag-nav-${item.name}`"
+            :key="`tag-nav-${index}`"
             :name="item.name"
-            @on-close="handleClose"
+            @on-close="handleClose(item)"
             @click.native="handleClick(item)"
             :closable="item.name !== 'home'"
-            :color="item.name === value.name ? 'primary' : 'default'"
+            :color="isCurrentTag(item) ? 'primary' : 'default'"
           >{{ showTitleInside(item) }}</Tag>
         </transition-group>
       </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { showTitle } from '@/libs/util'
+import { showTitle, routeEqual } from '@/libs/util'
 export default {
   name: 'TagsNav',
   props: {
@@ -56,7 +56,15 @@ export default {
   },
   data () {
     return {
-      tagBodyLeft: 0
+      tagBodyLeft: 0,
+      rightOffset: 40,
+      outerPadding: 4
+    }
+  },
+  computed: {
+    currentRouteObj () {
+      const { name, params, query } = this.value
+      return { name, params, query }
     }
   },
   methods: {
@@ -69,14 +77,16 @@ export default {
       this.handleScroll(delta)
     },
     handleScroll (offset) {
+      const outerWidth = this.$refs.scrollOuter.offsetWidth
+      const bodyWidth = this.$refs.scrollBody.offsetWidth
       if (offset > 0) {
         this.tagBodyLeft = Math.min(0, this.tagBodyLeft + offset)
       } else {
-        if (this.$refs.scrollOuter.offsetWidth < this.$refs.scrollBody.offsetWidth) {
-          if (this.tagBodyLeft < -(this.$refs.scrollBody.offsetWidth - this.$refs.scrollOuter.offsetWidth)) {
+        if (outerWidth < bodyWidth) {
+          if (this.tagBodyLeft < -(bodyWidth - outerWidth)) {
             this.tagBodyLeft = this.tagBodyLeft
           } else {
-            this.tagBodyLeft = Math.max(this.tagBodyLeft + offset, this.$refs.scrollOuter.offsetWidth - this.$refs.scrollBody.offsetWidth)
+            this.tagBodyLeft = Math.max(this.tagBodyLeft + offset, outerWidth - bodyWidth)
           }
         } else {
           this.tagBodyLeft = 0
@@ -90,20 +100,63 @@ export default {
         this.$emit('on-close', res, 'all')
       } else {
         // 关闭除当前页和home页的其他页
-        let res = this.list.filter(item => item.name === this.value.name || item.name === 'home')
+        let res = this.list.filter(item => routeEqual(this.currentRouteObj, item) || item.name === 'home')
         this.$emit('on-close', res, 'others')
+        setTimeout(() => {
+          this.getTagElementByName(this.currentRouteObj.name)
+        }, 100)
       }
     },
-    handleClose (e, name) {
-      let res = this.list.filter(item => item.name !== name)
-      this.$emit('on-close', res, undefined, name)
+    handleClose (current) {
+      let res = this.list.filter(item => !routeEqual(current, item))
+      this.$emit('on-close', res, undefined, current)
     },
     handleClick (item) {
       this.$emit('input', item)
     },
     showTitleInside (item) {
       return showTitle(item, this)
+    },
+    isCurrentTag (item) {
+      return routeEqual(this.currentRouteObj, item)
+    },
+    moveToView (tag) {
+      const outerWidth = this.$refs.scrollOuter.offsetWidth
+      const bodyWidth = this.$refs.scrollBody.offsetWidth
+      if (bodyWidth < outerWidth) {
+        this.tagBodyLeft = 0
+      } else if (tag.offsetLeft < -this.tagBodyLeft) {
+        // 标签在可视区域左侧
+        this.tagBodyLeft = -tag.offsetLeft + this.outerPadding
+      } else if (tag.offsetLeft > -this.tagBodyLeft && tag.offsetLeft + tag.offsetWidth < -this.tagBodyLeft + outerWidth) {
+        // 标签在可视区域
+        this.tagBodyLeft = Math.min(0, outerWidth - tag.offsetWidth - tag.offsetLeft - this.outerPadding)
+      } else {
+        // 标签在可视区域右侧
+        this.tagBodyLeft = -(tag.offsetLeft - (outerWidth - this.outerPadding - tag.offsetWidth))
+      }
+    },
+    getTagElementByName (name) {
+      this.$nextTick(() => {
+        this.refsTag = this.$refs.tagsPageOpened
+        this.refsTag.forEach((item, index) => {
+          if (name === item.name) {
+            let tag = this.refsTag[index].$el
+            this.moveToView(tag)
+          }
+        })
+      })
     }
+  },
+  watch: {
+    '$route' (to) {
+      this.getTagElementByName(to.name)
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.getTagElementByName(this.$route.name)
+    }, 200)
   }
 }
 </script>

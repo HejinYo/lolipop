@@ -12,6 +12,16 @@
   .header-con {
     background: #fff;
     padding: 0 20px;
+    position: 'fixed';
+    width: '100%';
+  }
+  .main-layout-con {
+    height: 100%;
+    overflow: hidden;
+  }
+  .main-content-con {
+    height: ~"calc(100% - 60px)";
+    overflow: hidden;
   }
   .tag-nav-wrapper {
     padding: 0;
@@ -21,6 +31,15 @@
   }
   .content-wrapper {
     padding: 5px;
+    height: ~"calc(100% - 80px)";
+    /*overflow: auto;*/
+  }
+  .left-sider {
+    .ivu-layout-sider-children {
+      overflow-y: scroll;
+      /* 隐藏菜单滚动条，注意自定义滚动条宽带对应 */
+      margin-right: -6px;
+    }
   }
 }
 
@@ -32,13 +51,26 @@
   margin-right: 8px !important;
 }
 
-.tip-common {
-  margin: 0 4px 0 0;
-  vertical-align: middle;
-  line-height: 1;
-  display: inline-block;
-  width: 30px;
-  cursor: pointer;
+.ivu-select-dropdown.ivu-dropdown-transfer {
+  max-height: 1000px;
+  & div.ivu-dropdown {
+    width: 100%;
+    margin: 0;
+    line-height: normal;
+    padding: 7px 0 6px 16px;
+    clear: both;
+    font-size: 12px !important;
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    &:hover {
+      background: rgba(100, 100, 100, 0.1);
+    }
+    & * {
+      color: #515a6e;
+    }
+  }
 }
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/

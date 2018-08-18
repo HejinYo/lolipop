@@ -131,7 +131,7 @@
   import 'cropperjs/dist/cropper.min.css'
   import { validatePhone } from '@/libs/validate'
   import { mapGetters, mapMutations, mapActions } from 'vuex'
-  import { getNextName } from '@/libs/util'
+  import { getNextRoute } from '@/libs/util'
 
   export default {
     name: 'ownspace_index',
@@ -257,7 +257,7 @@
       // 取消编辑用户信息
       cancelEditUserInfor () {
         let res = this.tagNavList.filter(item => item.name !== 'ownspace')
-        const nextName = getNextName(this.tagNavList, 'ownspace')
+        const nextName = getNextRoute(this.tagNavList, 'ownspace')
         this.setTagNavList(res)
         this.$router.push({name: nextName})
       },

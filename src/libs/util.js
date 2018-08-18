@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 // cookie保存的天数
 import config from '@/config'
-import { forEach, hasOneOf } from '@/libs/tools'
+import { forEach, hasOneOf, objEqual } from '@/libs/tools'
 
 export const TOKEN_KEY = 'token'
 
@@ -32,26 +32,22 @@ const showThisMenuEle = (item, access) => {
 export const getMenuByRouter = (list, access) => {
   let res = []
   forEach(list, item => {
-    if (item.meta && !item.meta.hideInMenu) {
+    if (!item.meta || (item.meta && !item.meta.hideInMenu)) {
       let obj = {
         icon: (item.meta && item.meta.icon) || '',
         name: item.name,
         meta: item.meta
       }
-      if (hasChild(item) && showThisMenuEle(item, access)) {
+      if ((hasChild(item) || (item.meta && item.meta.showAlways)) && showThisMenuEle(item, access)) {
         obj.children = getMenuByRouter(item.children, access)
       }
-      if (item.href) obj.href = item.href
+      if (item.meta && item.meta.href) obj.href = item.meta.href
       if (showThisMenuEle(item, access)) res.push(obj)
     }
   })
   return res
 }
 
-/**
- * @param {Array} routeMetched 当前路由metched
- * @returns {Array}
- */
 /**
  * @param {Array} routeMetched 当前路由metched
  * @returns {Array}
@@ -123,17 +119,6 @@ export const getNewTagList = (list, newRoute) => {
 }
 
 /**
- * @param {Boolean} status 状态 1 => locked  0 => unlocked
- * @description 这里只是为了演示，实际应该将锁定状态的设置和获取用接口来实现
- */
-export const setLockStatus = (status) => {
-  localStorage.isLocked = status
-}
-export const getLockStatus = () => {
-  return parseInt(localStorage.isLocked)
-}
-
-/**
  * @param {*} access 用户权限数组，如 ['super_admin', 'admin']
  * @param {*} route 路由列表
  */
@@ -143,6 +128,7 @@ const hasAccess = (access, route) => {
 }
 
 /**
+ * 权鉴
  * @param {*} name 即将跳转的路由name
  * @param {*} access 用户权限数组
  * @param {*} routes 路由列表
@@ -180,13 +166,14 @@ export const getParams = url => {
  * @param {Array} list 标签列表
  * @param {String} name 当前关闭的标签的name
  */
-export const getNextName = (list, name) => {
-  let res = ''
+export const getNextRoute = (list, route) => {
+  let res = {}
   if (list.length === 2) {
-    res = 'home'
+    res = getHomeRoute(list)
   } else {
-    if (list.findIndex(item => item.name === name) === list.length - 1) res = list[list.length - 2].name
-    else res = list[list.findIndex(item => item.name === name) + 1].name
+    const index = list.findIndex(item => routeEqual(item, route))
+    if (index === list.length - 1) res = list[list.length - 2]
+    else res = list[index + 1]
   }
   return res
 }
@@ -198,7 +185,7 @@ export const getNextName = (list, name) => {
 export const doCustomTimes = (times, callback) => {
   let i = -1
   while (++i < times) {
-    callback()
+    callback(i)
   }
 }
 
@@ -256,4 +243,56 @@ export const getTableDataFromArray = (array) => {
     columns,
     tableData
   }
+}
+
+export const findNodeUpper = (ele, tag) => {
+  if (ele.parentNode) {
+    if (ele.parentNode.tagName === tag.toUpperCase()) {
+      return ele.parentNode
+    } else {
+      return findNodeUpper(ele.parentNode, tag)
+    }
+  }
+}
+
+export const findNodeDownward = (ele, tag) => {
+  const tagName = tag.toUpperCase()
+  if (ele.childNodes.length) {
+    let i = -1
+    let len = ele.childNodes.length
+    while (++i < len) {
+      let child = ele.childNodes[i]
+      if (child.tagName === tagName) return child
+      else return findNodeDownward(child, tag)
+    }
+  }
+}
+
+export const showByAccess = (access, canViewAccess) => {
+  return hasOneOf(canViewAccess, access)
+}
+
+/**
+ * @description 根据name/params/query判断两个路由对象是否相等
+ * @param {*} route1 路由对象
+ * @param {*} route2 路由对象
+ */
+export const routeEqual = (route1, route2) => {
+  const params1 = route1.params || {}
+  const params2 = route2.params || {}
+  const query1 = route1.query || {}
+  const query2 = route2.query || {}
+  return (route1.name === route2.name) && objEqual(params1, params2) && objEqual(query1, query2)
+}
+
+/**
+ * 判断打开的标签列表里是否已存在这个新添加的路由对象
+ */
+export const routeHasExist = (tagNavList, routeItem) => {
+  let len = tagNavList.length
+  let res = false
+  doCustomTimes(len, (index) => {
+    if (routeEqual(tagNavList[index], routeItem)) res = true
+  })
+  return res
 }

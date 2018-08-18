@@ -76,7 +76,7 @@ class httpRequest {
             name: 'authc_error'
           })
           setTimeout(() => {
-            window.location.href = '/#/login'
+            window.location.href = window.location.pathname + '#/login'
           }, 2000)
           // 返回reject阻拦本次请求，会报错，但是没办法userName.trim()
           return Promise.reject(data.msg)

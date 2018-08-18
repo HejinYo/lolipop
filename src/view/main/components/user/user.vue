@@ -1,5 +1,5 @@
 <template>
-  <div class="user-avator-dropdown">
+  <div>
     <Dropdown @on-click="handleClick" trigger="click" class="dev-header-dropdown-user" placement="bottom-end">
       <div>
         <Avatar :src="userAvator"/>

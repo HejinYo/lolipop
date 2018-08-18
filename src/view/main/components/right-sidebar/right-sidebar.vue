@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-common">
+  <div>
     <Poptip placement="bottom-end">
       <Icon type="ios-switch" :size="22"></Icon>
       <div slot="content">

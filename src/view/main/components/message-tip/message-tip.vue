@@ -1,12 +1,12 @@
 <template>
-  <div class="tip-common">
+  <div>
     <!-- <Tooltip :content="value > 0 ? '有' + value + '条未读消息' : '无未读消息'" placement="bottom">
        <Badge :count="value">
          <Icon type="md-notifications-outline" :size="22"></Icon>
        </Badge>
      </Tooltip>-->
     <Poptip placement="bottom-end" class="dev-header-notification">
-      <Badge :count="value">
+      <Badge :count="value" class="message-tip-badge">
         <Icon type="md-notifications-outline" :size="22"></Icon>
       </Badge>
 
@@ -98,6 +98,12 @@
 </script>
 
 <style lang="less">
+  .message-tip-badge {
+    margin: 0 4px 0 0;
+    line-height: 1;
+    width: 25px;
+    cursor: pointer;
+  }
 
   .dev-header-tabs {
     text-align: center;

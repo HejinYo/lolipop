@@ -4,11 +4,11 @@
 </style>
 <template>
   <div class="home-main">
-    <Row :gutter="10">
+    <Row :gutter="10" >
       <Col :md="24" :lg="8">
         <!-- 个人信息 -->
-        <Row :gutter="20">
-          <Col :md="12" :lg="24" :style="{marginBottom: '10px'}">
+        <Row>
+          <Col :style="{marginBottom: '10px'}">
             <Card>
               <Row type="flex" class="user-infor">
                 <Col span="8">
@@ -46,9 +46,9 @@
       </Col>
       <Col :md="24" :lg="16">
         <!-- 数字渐变列表 -->
-        <Row :gutter="20">
-          <i-col :xs="12" :sm="8" :md="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" :style="{marginBottom: '10px',height: '110px'}">
-            <infor-card shadow :color="infor.color" :icon="infor.icon" :icon-size="36">
+        <Row :gutter="10">
+          <i-col :xs="12" :sm="8" :md="8" v-for="(infor, i) in inforCardData" :key="`infor-${i}`" :style="{marginBottom: '10px',height: '107px'}">
+            <infor-card  :color="infor.color" :icon="infor.icon" :icon-size="36">
               <count-to :end="infor.count" count-class="count-style"/>
               <p>{{ infor.title }}</p>
             </infor-card>
@@ -56,14 +56,14 @@
         </Row>
       </Col>
     </Row>
-    <Row :gutter="20">
-      <i-col span="8">
-        <Card shadow>
+    <Row :gutter="10" >
+      <i-col :md="24" :lg="8">
+        <Card >
           <chart-pie style="height: 300px;" :value="pieData" text="用户访问来源"></chart-pie>
         </Card>
       </i-col>
-      <i-col span="16">
-        <Card shadow>
+      <i-col :md="24" :lg="16">
+        <Card >
           <chart-bar style="height: 300px;" :value="barData" text="每周用户活跃量"/>
         </Card>
       </i-col>

@@ -1,4 +1,4 @@
-import { getBreadCrumbList, setTagNavListInLocalstorage, getTagNavListFromLocalstorage, getHomeRoute } from '@/libs/util'
+import { getBreadCrumbList, setTagNavListInLocalstorage, getMenuByRouter, getTagNavListFromLocalstorage, getHomeRoute, routeHasExist } from '@/libs/util'
 import routers from '@/router/routers'
 
 export default {
@@ -7,11 +7,10 @@ export default {
     breadCrumbList: [],
     tagNavList: [],
     homeRoute: getHomeRoute(routers),
-    messageCount: 10
+    messageCount: 10,
+    local: ''
   },
   getters: {
-    // 获取菜单List
-    /* menuList: (state, getters, rootState) => getMenuByRouter(routers, rootState.user.access) */
     tagNavList (state) {
       return state.tagNavList
     },
@@ -35,15 +34,21 @@ export default {
         setTagNavListInLocalstorage([...list])
       } else state.tagNavList = getTagNavListFromLocalstorage()
     },
-    addTag (state, item, type = 'unshift') {
-      if (state.tagNavList.findIndex(tag => tag.name === item.name) < 0) {
-        if (type === 'push') state.tagNavList.push(item)
-        else state.tagNavList.unshift(item)
+    addTag (state, {route, type = 'unshift'}) {
+      if (!routeHasExist(state.tagNavList, route)) {
+        if (type === 'push') state.tagNavList.push(route)
+        else {
+          if (route.name === 'home') state.tagNavList.unshift(route)
+          else state.tagNavList.splice(1, 0, route)
+        }
         setTagNavListInLocalstorage([...state.tagNavList])
       }
     },
     setMessageCount (state, count) {
       state.messageCount = count
+    },
+    setLocal (state, lang) {
+      state.local = lang
     }
   }
 }
