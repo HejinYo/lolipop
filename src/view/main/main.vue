@@ -2,7 +2,7 @@
   <Layout style="height: 100%" class="main">
     <Sider hide-trigger collapsible :width="210" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
       <!-- 菜单数据加载完才开始渲染 -->
-      <side-menu  v-if="menuList.length > 0"  accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
+      <side-menu v-if="menuList.length > 0" accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage" :menu-list="menuList">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         <div class="logo-con">
           <img v-show="!collapsed" :src="maxLogo" key="max-logo"/>
@@ -15,7 +15,7 @@
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
           <user :user-avator="userAvator" :user-name="userName"/>
           <right-sidebar style="margin-right: 30px;"/>
-          <full-screen v-model="isFullScreen"  style="margin-right: 10px;"></full-screen>
+          <full-screen v-model="isFullScreen" style="margin-right: 10px;"></full-screen>
           <message-tip v-model="messageCount" style="margin-right: 10px;"></message-tip>
         </header-bar>
       </Header>
@@ -42,8 +42,8 @@
   import FullScreen from './components/full-screen'
   import MessageTip from './components/message-tip'
   import RightSidebar from './components/right-sidebar'
-  import { mapMutations, mapActions } from 'vuex'
-  import { getNewTagList, getNextRoute, routeEqual } from '@/libs/util'
+  import {mapMutations, mapActions} from 'vuex'
+  import {getNewTagList, getNextRoute, routeEqual} from '@/libs/util'
   import minLogo from '@/assets/images/logo-min.png'
   import maxLogo from '@/assets/images/logo.png'
   import './main.less'
@@ -131,10 +131,13 @@
           this.turnToPage('home')
           openName = 'home'
         } else if (routeEqual(this.$route, route)) {
-          const nextRoute = getNextRoute(this.tagNavList, route)
-          this.$router.push(nextRoute)
-          if (type === 'other') openName = route.name
-          else openName = nextRoute.name
+          if (type === 'others') {
+            openName = route.name
+          } else {
+            const nextRoute = getNextRoute(this.tagNavList, route)
+            this.$router.push(nextRoute)
+            openName = nextRoute.name
+          }
         }
         this.setTagNavList(res)
         this.$refs.sideMenu.updateOpenName(openName)

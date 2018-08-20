@@ -36,7 +36,7 @@
   import LogApi from '@/api/system/log-api'
 
   export default {
-    name: 'sys-log',
+    name: 'log',
     components: {
       OperateTable,
       JsonView

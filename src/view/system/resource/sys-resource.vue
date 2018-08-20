@@ -213,7 +213,7 @@
   import PermCheck from '@/libs/perm-check'
 
   export default {
-    name: 'sys-resource',
+    name: 'resource',
     components: {
       OperateTree,
       IconPane,

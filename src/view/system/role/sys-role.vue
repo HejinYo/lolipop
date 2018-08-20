@@ -118,7 +118,7 @@
   import PermissionApi from '@/api/system/permission-api'
 
   export default {
-    name: 'sys-role',
+    name: 'role',
     components: {
       OperateTree,
       DictShow,

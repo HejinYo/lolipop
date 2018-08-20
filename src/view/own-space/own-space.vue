@@ -129,9 +129,9 @@
 <script>
   import Cropper from 'cropperjs'
   import 'cropperjs/dist/cropper.min.css'
-  import { validatePhone } from '@/libs/validate'
-  import { mapGetters, mapMutations, mapActions } from 'vuex'
-  import { getNextRoute } from '@/libs/util'
+  import {validatePhone} from '@/libs/validate'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import {getNextRoute} from '@/libs/util'
 
   export default {
     name: 'ownspace_index',
@@ -257,9 +257,9 @@
       // 取消编辑用户信息
       cancelEditUserInfor () {
         let res = this.tagNavList.filter(item => item.name !== 'ownspace')
-        const nextName = getNextRoute(this.tagNavList, 'ownspace')
+        const nextRoute = getNextRoute(this.tagNavList, {name: 'ownspace'})
         this.setTagNavList(res)
-        this.$router.push({name: nextName})
+        this.$router.push(nextRoute)
       },
       // 保存用户信息
       saveEdit () {

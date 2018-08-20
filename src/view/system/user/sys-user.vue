@@ -176,7 +176,7 @@
   import { validatePhone } from '@/libs/validate'
 
   export default {
-    name: 'sys-user',
+    name: 'user',
     components: {
       OperateTree,
       DictShow,

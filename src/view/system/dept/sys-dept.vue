@@ -135,7 +135,7 @@
   import DeptApi from '@/api/system/dept-api'
 
   export default {
-    name: 'sys-dept',
+    name: 'dept',
     components: {
       OperateTree,
       DictShow,
