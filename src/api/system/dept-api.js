@@ -1,10 +1,12 @@
 import axios from '@/libs/api.request'
 
+const jellyServer = `/calm-jelly`
+
 class DeptApi {
   // 部门选择树数据
   static reqDeptSelect () {
     return axios.request({
-      url: '/sys/dept/select',
+      url: `${jellyServer}/dept/select`,
       method: 'get'
     })
   }
@@ -12,7 +14,7 @@ class DeptApi {
   // 部门管理树数据
   static reqDeptOperateTree () {
     return axios.request({
-      url: '/sys/dept/operateTree',
+      url: `${jellyServer}/dept/operateTree`,
       method: 'get'
     })
   }
@@ -20,7 +22,7 @@ class DeptApi {
   // 部门管理分页查询
   static reqDeptListPage (method, params, data) {
     return axios.request({
-      url: '/sys/dept/listPage',
+      url: `${jellyServer}/dept/listPage`,
       method: method,
       data: data,
       params: params
@@ -30,7 +32,7 @@ class DeptApi {
   // 获取一个部门详情
   static reqDeptInfo (deptId) {
     return axios.request({
-      url: '/sys/dept/' + deptId,
+      url: `${jellyServer}/dept/${deptId}`,
       method: 'get'
     })
   }
@@ -38,7 +40,7 @@ class DeptApi {
   // 保存部门
   static reqDeptSave (data) {
     return axios.request({
-      url: '/sys/dept',
+      url: `${jellyServer}/dept`,
       method: 'post',
       data: data
     })
@@ -47,7 +49,7 @@ class DeptApi {
   // 修改部门
   static reqDeptUpdate (data, deptId) {
     return axios.request({
-      url: '/sys/dept/' + deptId,
+      url: `${jellyServer}/dept/${deptId}`,
       method: 'put',
       data: data
     })
@@ -56,7 +58,7 @@ class DeptApi {
   // 删除部门
   static reqDeptDelete (deptId) {
     return axios.request({
-      url: '/sys/dept/' + deptId,
+      url: `${jellyServer}/dept/${deptId}`,
       method: 'delete'
     })
   }
@@ -64,7 +66,7 @@ class DeptApi {
   // 部门树节点拖动
   static reqDeptDrop (type, deptId, inResId) {
     return axios.request({
-      url: '/sys/dept/drop/' + type + '/' + deptId + '/' + inResId,
+      url: `${jellyServer}/dept/drop/${type}/${deptId}/${inResId}`,
       method: 'put'
     })
   }

@@ -1,10 +1,12 @@
 import axios from '@/libs/api.request'
 
+const jellyServer = `/calm-jelly`
+
 class ResourceApi {
   // 资源管理树数据
   static reqResourceOperateTree () {
     return axios.request({
-      url: '/sys/resource/operateTree',
+      url: `${jellyServer}/resource/operateTree`,
       method: 'get'
     })
   }
@@ -12,7 +14,7 @@ class ResourceApi {
   // 资源管理分页查询
   static reqResourceListPage (method, params, data) {
     return axios.request({
-      url: '/sys/resource/listPage',
+      url: `${jellyServer}/resource/listPage`,
       method: method,
       data: data,
       params: params
@@ -22,7 +24,7 @@ class ResourceApi {
   // 获取一个资源详情
   static reqResourceInfo (resId) {
     return axios.request({
-      url: '/sys/resource/' + resId,
+      url: `${jellyServer}/resource/${resId}`,
       method: 'get'
     })
   }
@@ -30,7 +32,7 @@ class ResourceApi {
   // 保存资源
   static reqResourceSave (data) {
     return axios.request({
-      url: '/sys/resource',
+      url: `${jellyServer}/resource`,
       method: 'post',
       data: data
     })
@@ -39,7 +41,7 @@ class ResourceApi {
   // 修改资源
   static reqResourceUpdate (data, resId) {
     return axios.request({
-      url: '/sys/resource/' + resId,
+      url: `${jellyServer}/resource/${resId}`,
       method: 'put',
       data: data
     })
@@ -48,7 +50,7 @@ class ResourceApi {
   // 删除资源
   static reqResourceDelete (resId) {
     return axios.request({
-      url: '/sys/resource/' + resId,
+      url: `${jellyServer}/resource/${resId}`,
       method: 'delete'
     })
   }
@@ -56,7 +58,7 @@ class ResourceApi {
   // 资源树节点拖动
   static reqResourceDrop (type, resId, inResId) {
     return axios.request({
-      url: '/sys/resource/drop/' + type + '/' + resId + '/' + inResId,
+      url: `${jellyServer}/resource/drop/${type}/${resId}/${inResId}`,
       method: 'put'
     })
   }

@@ -1,10 +1,12 @@
 import axios from '@/libs/api.request'
 
+const jellyServer = `/calm-jelly`
+
 class RoleApi {
   // 角色列表下拉选择
   static reqRoleDrop () {
     return axios.request({
-      url: '/sys/role/drop',
+      url: `${jellyServer}/role/drop`,
       method: 'get'
     })
   }
@@ -12,7 +14,7 @@ class RoleApi {
   // 角色管理分页查询
   static reqRoleListPage (method, params, data) {
     return axios.request({
-      url: '/sys/role/listPage',
+      url: `${jellyServer}/role/listPage`,
       method: method,
       data: data,
       params: params
@@ -22,7 +24,7 @@ class RoleApi {
   // 获取一个角色详情
   static reqRoleInfo (roleId) {
     return axios.request({
-      url: '/sys/role/' + roleId,
+      url: `${jellyServer}/role/${roleId}`,
       method: 'get'
     })
   }
@@ -30,7 +32,7 @@ class RoleApi {
   // 保存角色
   static reqRoleSave (data) {
     return axios.request({
-      url: '/sys/role',
+      url: `${jellyServer}/role`,
       method: 'post',
       data: data
     })
@@ -39,7 +41,7 @@ class RoleApi {
   // 修改角色
   static reqRoleUpdate (data, roleId) {
     return axios.request({
-      url: '/sys/role/' + roleId,
+      url: `${jellyServer}/role/${roleId}`,
       method: 'put',
       data: data
     })
@@ -48,7 +50,7 @@ class RoleApi {
   // 删除角色
   static reqRoleDelete (roleId) {
     return axios.request({
-      url: '/sys/role/' + roleId,
+      url: `${jellyServer}/role/${roleId}`,
       method: 'delete'
     })
   }

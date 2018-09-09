@@ -1,10 +1,12 @@
 import axios from '@/libs/api.request'
 
+const jellyServer = `/calm-jelly`
+
 class PermissionApi {
   // 获取授权树
   static reqPermissionAuthTree () {
     return axios.request({
-      url: '/sys/permission/authTree',
+      url: `${jellyServer}/permission/authTree`,
       method: 'get'
     })
   }
@@ -12,7 +14,7 @@ class PermissionApi {
   // 权限管理分页查询
   static reqPermissionListPage (method, params, data) {
     return axios.request({
-      url: '/sys/permission/listPage',
+      url: `${jellyServer}/permission/listPage`,
       method: method,
       data: data,
       params: params
@@ -22,7 +24,7 @@ class PermissionApi {
   // 获取一个权限详情
   static reqPermissionInfo (permId) {
     return axios.request({
-      url: '/sys/permission/' + permId,
+      url: `${jellyServer}/permission/${permId}`,
       method: 'get'
     })
   }
@@ -30,7 +32,7 @@ class PermissionApi {
   // 保存权限
   static reqPermissionSave (data) {
     return axios.request({
-      url: '/sys/permission',
+      url: `${jellyServer}/permission`,
       method: 'post',
       data: data
     })
@@ -39,7 +41,7 @@ class PermissionApi {
   // 修改权限
   static reqPermissionUpdate (data, permId) {
     return axios.request({
-      url: '/sys/permission/' + permId,
+      url: `${jellyServer}/permission/${permId}`,
       method: 'put',
       data: data
     })
@@ -48,7 +50,7 @@ class PermissionApi {
   // 删除权限
   static reqPermissionDelete (permId) {
     return axios.request({
-      url: '/sys/permission/' + permId,
+      url: `${jellyServer}/permission/${permId}`,
       method: 'delete'
     })
   }

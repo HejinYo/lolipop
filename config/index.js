@@ -20,7 +20,7 @@ module.exports = {
       },
       '/api': {
         //target: 'https://m.hejinyo.cn/api/',
-        target: 'http://127.0.0.1:88/',
+        target: 'http://127.0.0.1:8020/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
